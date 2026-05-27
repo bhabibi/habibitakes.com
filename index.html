@@ -4,9 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HabibiTakes</title>
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="//fonts.gstatic.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" as="style" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" href="assets/habibitakes-hero.jpg" as="image" fetchpriority="high" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" type="image/png" href="assets/HT_THUMB.png" />
   <link rel="apple-touch-icon" href="assets/HT_THUMB.png" />
@@ -80,6 +84,9 @@
   <section id="ht-hero">
     <div class="ht-hero-img" role="img" aria-label="HabibiTakes sign on a California hillside"></div>
     <div class="ht-hero-overlay"></div>
+
+    <!-- Typewriter tagline — center of hero, filled by JS -->
+    <p class="ht-hero-tagline" id="htHeroTagline" aria-label="Reseller · Sourcer · Entrepreneur"></p>
 
     <!-- Location badge — bottom left -->
     <div class="ht-hero-badge">
@@ -335,13 +342,23 @@
     const navToggle = document.getElementById('navToggle');
     const navLinks  = document.getElementById('navLinks');
     navToggle.addEventListener('click', () => {
-      navToggle.classList.toggle('open');
-      navLinks.classList.toggle('open');
+      const isOpen = navToggle.classList.toggle('open');
+      navLinks.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', String(isOpen));
     });
     navAnchors.forEach(a => a.addEventListener('click', () => {
       navToggle.classList.remove('open');
       navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
     }));
+    // Close on outside click
+    document.addEventListener('click', e => {
+      if (!navbar.contains(e.target) && navLinks.classList.contains('open')) {
+        navToggle.classList.remove('open');
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
 
     /* ── Intersection Observer: fade-in on scroll ────────────────── */
     const io = new IntersectionObserver(
@@ -496,6 +513,41 @@
         requestAnimationFrame(tick);
       })();
     })();
+
+    /* ── Typewriter effect ───────────────────────────────────────── */
+    (function () {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function typewrite(el, text, delay) {
+        if (reduced) { el.textContent = text; return; }
+        el.textContent = '';
+        el.classList.add('tw-typing');
+        let i = 0;
+        setTimeout(() => {
+          const iv = setInterval(() => {
+            el.textContent += text[i++];
+            if (i >= text.length) {
+              clearInterval(iv);
+              setTimeout(() => el.classList.remove('tw-typing'), 1000);
+            }
+          }, 45);
+        }, delay);
+      }
+      const tag = document.getElementById('htHeroTagline');
+      if (tag) typewrite(tag, 'Reseller · Sourcer · Entrepreneur', 1200);
+    })();
+
+    /* ── Page transition ─────────────────────────────────────────── */
+    document.querySelectorAll('.switcher-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const href = btn.getAttribute('href');
+        if (!href || href === '#' || btn.classList.contains('active')) return;
+        e.preventDefault();
+        document.body.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        document.body.style.opacity = '0';
+        document.body.style.transform = 'translateY(-10px)';
+        setTimeout(() => { window.location.href = href; }, 300);
+      });
+    });
 
     /* ── Contact form: Formspree async submission ─────────────────── */
     const form    = document.getElementById('contact-form-ht');
