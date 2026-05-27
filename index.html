@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HabibiTakes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="ht-page">
+
+  <!-- ============================================================
+       NAVIGATION
+       ============================================================ -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <div class="nav-switcher">
+        <a href="https://bryanhabibi.com" class="switcher-btn">Bryan Habibi</a>
+        <a href="habibitakes.html" class="switcher-btn switcher-ht active">
+          <img src="assets/habibitakes-button.jpg" alt="HabibiTakes" class="ht-btn-img" />
+        </a>
+      </div>
+
+      <div class="nav-right">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#about">About</a></li>
+          <li><a href="#links">Links</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <!-- Hamburger (mobile only) -->
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+
+        <!-- Dark / light mode toggle — sun / moon icons -->
+        <button class="theme-toggle" id="themeToggle" aria-label="Switch to dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       HERO — photo background with Ken Burns + overlay
+       Replace habibitakes-hero.jpg with your actual image file
+       ============================================================ -->
+  <section id="ht-hero">
+    <div class="ht-hero-img"></div>
+    <div class="ht-hero-overlay"></div>
+
+    <!-- Location badge — bottom left -->
+    <div class="ht-hero-badge">
+      <span class="ht-hero-loc-dot"></span>
+      <span class="ht-hero-loc-text">Orange County &middot; California</span>
+    </div>
+
+    <!-- Scroll hint — bottom center -->
+    <div class="ht-scroll-hint" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       ABOUT
+       ============================================================ -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- Left: bio + stats -->
+        <div>
+          <p class="section-label fade-in">About Us</p>
+          <h2 class="section-title fade-in d1">Built on<br/><em>moving product.</em></h2>
+          <p class="about-bio fade-in d2">
+            <strong>HabibiTakes</strong> is a Southern California&ndash;based resale and
+            distribution operation founded in 2019. Specializing in bulk product acquisition
+            and multi-channel liquidation, I&rsquo;ve moved over 10,000 units across Amazon,
+            eBay, Facebook Marketplace, OfferUp, and direct B2B buyers. From consumer goods to
+            electronics to apparel &mdash; I source smart, move fast, and turn inventory at scale.
+          </p>
+          <div class="stats">
+            <div class="stat-card fade-in d2">
+              <div class="stat-num">Est. 2019</div>
+              <div class="stat-lbl">Orange County Original</div>
+            </div>
+            <div class="stat-card fade-in d3">
+              <div class="stat-num" style="font-size: 3.5rem; line-height: 1;">∞</div>
+              <div class="stat-lbl">Categories tried</div>
+            </div>
+            <div class="stat-card fade-in d4">
+              <div class="stat-num">30-90 Days</div>
+              <div class="stat-lbl">Avg. Inventory Turnover</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: circular slideshow (populated by JS from assets/ht-photo-N.png) -->
+        <div class="photo-wrap fade-in">
+          <div class="ht-circle-slideshow" id="htCircleSlideshow"
+               role="button" tabindex="0" title="Click to expand"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       LINKS HUB — 4 platforms with brand hover glows
+       ============================================================ -->
+  <section id="links">
+    <div class="container">
+      <p class="section-label fade-in">Find Us</p>
+      <h2 class="section-title fade-in d1">Shop &amp;<br/><em>connect.</em></h2>
+
+      <div class="ht-links-grid">
+
+        <!-- eBay -->
+        <a href="https://www.ebay.com/usr/habibitakes2" target="_blank" rel="noopener noreferrer" class="link-card lc-ebay fade-in">
+          <div class="lc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+              <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+            </svg>
+          </div>
+          <div class="lc-info">
+            <div class="lc-name">eBay</div>
+          </div>
+          <div class="lc-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </div>
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/habibitakes/" target="_blank" rel="noopener noreferrer" class="link-card lc-instagram fade-in d1">
+          <div class="lc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="lc-info">
+            <div class="lc-name">Instagram</div>
+          </div>
+          <div class="lc-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </div>
+        </a>
+
+        <!-- Facebook Marketplace -->
+        <a href="https://www.facebook.com/marketplace/profile/100002579779773/" target="_blank" rel="noopener noreferrer" class="link-card lc-facebook fade-in d2">
+          <div class="lc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <div class="lc-info">
+            <div class="lc-name">Facebook Marketplace</div>
+          </div>
+          <div class="lc-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </div>
+        </a>
+
+        <!-- OfferUp -->
+        <a href="https://offerup.com/p/35720471" target="_blank" rel="noopener noreferrer" class="link-card lc-offerup fade-in d3">
+          <div class="lc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+          </div>
+          <div class="lc-info">
+            <div class="lc-name">OfferUp</div>
+          </div>
+          <div class="lc-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       CONTACT
+       ============================================================ -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-layout">
+
+        <div>
+          <p class="section-label fade-in">Get In Touch</p>
+          <h2 class="section-title fade-in d1">Let&rsquo;s<br/><em>do business.</em></h2>
+          <p class="fade-in d2">
+            Interested in bulk purchasing, wholesale deals, or a B2B partnership?
+            Fill out the form and I&rsquo;ll get back to you within 24&ndash;48 hours.
+          </p>
+        </div>
+
+        <!-- Replace REPLACE_WITH_YOUR_ID with your Formspree form ID -->
+        <div class="contact-form fade-in d2">
+          <form id="contactForm" novalidate>
+            <div class="form-row">
+              <label for="fname">Your Name</label>
+              <input type="text" id="fname" name="name" placeholder="Johnny Appleseed" required />
+            </div>
+            <div class="form-row">
+              <label for="femail">Email Address</label>
+              <input type="email" id="femail" name="email" placeholder="you@example.com" required />
+            </div>
+            <div class="form-row">
+              <label for="fmessage">Message</label>
+              <textarea id="fmessage" name="message" placeholder="Tell me what you&rsquo;re looking for…" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message &rarr;</button>
+            <div id="form-error"></div>
+            <p class="form-note">Your message goes straight to my inbox.<br/>I typically respond within 24&ndash;48 hours.</p>
+          </form>
+
+          <div id="form-success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <p>Thanks for reaching out!</p>
+            <small>I&rsquo;ll get back to you soon.</small>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer>
+    <p>&copy; <span id="yr"></span> &mdash; HabibiTakes</p>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script>
+    /* ── Dark / Light mode — class toggled on <body> for ht-page ── */
+    (function () {
+      const saved       = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) document.body.classList.add('dark');
+    })();
+
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) document.body.classList.toggle('dark', e.matches);
+    });
+
+    /* ── Footer year ─────────────────────────────────────────────── */
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    /* ── Nav: scroll glass + active-link highlighting ────────────── */
+    const navbar     = document.getElementById('navbar');
+    const sections   = document.querySelectorAll('section[id]');
+    const navAnchors = document.querySelectorAll('.nav-links a');
+
+    function onScroll() {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+      let current = '';
+      sections.forEach(sec => {
+        if (window.scrollY >= sec.offsetTop - 130) current = sec.id;
+      });
+      navAnchors.forEach(a =>
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current)
+      );
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ── Mobile hamburger ────────────────────────────────────────── */
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    navAnchors.forEach(a => a.addEventListener('click', () => {
+      navToggle.classList.remove('open');
+      navLinks.classList.remove('open');
+    }));
+
+    /* ── Intersection Observer: fade-in on scroll ────────────────── */
+    const io = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      }),
+      { threshold: 0.1, rootMargin: '0px 0px -36px 0px' }
+    );
+    document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+    /* ── Circular slideshow with lightbox ────────────────────────── */
+    (function () {
+      const container = document.getElementById('htCircleSlideshow');
+      if (!container) return;
+
+      const slots   = new Array(10).fill(null);
+      let   pending = 10;
+
+      function tryBuild() {
+        if (--pending > 0) return;
+        const srcs = slots.filter(Boolean);
+        if (!srcs.length) return;
+
+        /* Build slide elements */
+        srcs.forEach((src, i) => {
+          const slide = document.createElement('div');
+          slide.className = 'ht-cs-slide' + (i === 0 ? ' active' : '');
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = 'HabibiTakes';
+          slide.appendChild(img);
+          container.appendChild(slide);
+        });
+
+        /* Lightbox */
+        const lb = document.createElement('div');
+        lb.className = 'ht-lightbox';
+        lb.innerHTML = '<button class="ht-lightbox-close" aria-label="Close">×<\/button><img alt="HabibiTakes">';
+        document.body.appendChild(lb);
+        const lbImg   = lb.querySelector('img');
+        const lbClose = lb.querySelector('.ht-lightbox-close');
+        let paused = false;
+
+        const openLb = () => {
+          const active = container.querySelector('.ht-cs-slide.active img');
+          if (!active) return;
+          lbImg.src = active.src;
+          lb.classList.add('open');
+          paused = true;
+        };
+        const closeLb = () => { lb.classList.remove('open'); paused = false; };
+
+        container.addEventListener('click', openLb);
+        container.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openLb(); });
+        lbClose.addEventListener('click', e => { e.stopPropagation(); closeLb(); });
+        lb.addEventListener('click', closeLb);
+        lbImg.addEventListener('click', e => e.stopPropagation());
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+        /* Crossfade interval */
+        const slides = container.querySelectorAll('.ht-cs-slide');
+        let cur = 0;
+        if (slides.length > 1) {
+          setInterval(() => {
+            if (paused) return;
+            slides[cur].classList.remove('active');
+            cur = (cur + 1) % slides.length;
+            slides[cur].classList.add('active');
+          }, 4000);
+        }
+      }
+
+      /* Preload images 1–20. Try .jpeg → .jpg → .JPG per slot; first hit wins. */
+      const MAX   = 20;
+      const EXTS  = ['.jpeg', '.jpg', '.JPG'];
+      pending = MAX;
+
+      function loadSlot(idx) {
+        const exts = [...EXTS];
+        function tryNext() {
+          if (!exts.length) { tryBuild(); return; }
+          const ext = exts.shift();
+          const img = new Image();
+          img.onload  = () => { slots[idx] = img.src; tryBuild(); };
+          img.onerror = tryNext;
+          img.src = 'assets/ht-photo-' + (idx + 1) + ext;
+        }
+        tryNext();
+      }
+      slots.length = MAX;
+      slots.fill(null);
+      for (let i = 0; i < MAX; i++) loadSlot(i);
+    })();
+
+    /* ── Contact form: Formspree async submission ─────────────────
+       Replace REPLACE_WITH_YOUR_ID with your Formspree form ID.
+    ─────────────────────────────────────────────────────────────── */
+    const form    = document.getElementById('contactForm');
+    const success = document.getElementById('form-success');
+    const errEl   = document.getElementById('form-error');
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const name    = form.name.value.trim();
+      const email   = form.email.value.trim();
+      const message = form.message.value.trim();
+      if (!name || !email || !message) return;
+
+      const btn = form.querySelector('.submit-btn');
+      btn.textContent     = 'Almost There...';
+      btn.disabled        = true;
+      errEl.style.display = 'none';
+
+      try {
+        const res = await fetch('https://formspree.io/f/REPLACE_WITH_YOUR_ID', {
+          method:  'POST',
+          headers: { 'Accept': 'application/json' },
+          body:    new FormData(form)
+        });
+
+        if (res.ok) {
+          form.style.display    = 'none';
+          success.style.display = 'block';
+        } else {
+          const data = await res.json();
+          const msg  = data.errors?.map(err => err.message).join(' ')
+                       || 'Something went wrong. Please try again.';
+          throw new Error(msg);
+        }
+      } catch (err) {
+        const isNetwork = err instanceof TypeError;
+        errEl.textContent   = isNetwork
+          ? 'Unable to send — please check your connection and try again.'
+          : (err.message || 'Something went wrong. Please try again.');
+        errEl.style.display = 'block';
+        btn.textContent     = 'Send Message →';
+        btn.disabled        = false;
+      }
+    });
+  </script>
+
+</body>
+</html>
