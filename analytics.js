@@ -152,6 +152,8 @@
 
   // ── 2. SESSION END ───────────────────────────────
   function sendSessionEnd() {
+    if (session.endSent) return;
+    session.endSent = true;
     const duration = formatDuration(Date.now() - session.start);
     send(CHAN, {
       embeds: [{
