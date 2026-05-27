@@ -9,8 +9,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" type="image/png" href="assets/HT_THUMB.png" />
+  <link rel="apple-touch-icon" href="assets/HT_THUMB.png" />
+  <meta name="description" content="HabibiTakes — Southern California resale and distribution. Bulk product acquisition and multi-channel liquidation across eBay, Facebook Marketplace, OfferUp, and B2B." />
+  <meta property="og:title" content="HabibiTakes" />
+  <meta property="og:description" content="Southern California resale and distribution. Bulk acquisition and multi-channel liquidation across eBay, Facebook Marketplace, OfferUp, and B2B." />
+  <meta property="og:image" content="https://habibitakes.com/assets/HT_THUMB.png" />
+  <meta property="og:url" content="https://habibitakes.com" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HabibiTakes" />
+  <meta name="twitter:description" content="Southern California resale and distribution. Bulk acquisition and multi-channel liquidation." />
+  <meta name="twitter:image" content="https://habibitakes.com/assets/HT_THUMB.png" />
+  <link rel="canonical" href="https://habibitakes.com" />
 </head>
 <body class="ht-page">
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- ============================================================
        NAVIGATION
@@ -18,9 +32,9 @@
   <nav id="navbar">
     <div class="nav-inner">
       <div class="nav-switcher">
-        <a href="https://bryanhabibi.com" class="switcher-btn">Bryan Habibi</a>
-        <a href="habibitakes.html" class="switcher-btn switcher-ht active">
-          <img src="assets/habibitakes-button.jpg" alt="HabibiTakes" class="ht-btn-img" />
+        <a href="https://bryanhabibi.com" class="switcher-btn" aria-label="Go to Bryan Habibi site">Bryan Habibi</a>
+        <a href="https://habibitakes.com" class="switcher-btn switcher-ht active" aria-label="Go to HabibiTakes site">
+          <img src="assets/habibitakes-button.jpg" alt="HabibiTakes logo" class="ht-btn-img" />
         </a>
       </div>
 
@@ -32,12 +46,12 @@
         </ul>
 
         <!-- Hamburger (mobile only) -->
-        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
           <span></span><span></span><span></span>
         </button>
 
         <!-- Dark / light mode toggle — sun / moon icons -->
-        <button class="theme-toggle" id="themeToggle" aria-label="Switch to dark mode">
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="5"/>
             <line x1="12" y1="1" x2="12" y2="3"/>
@@ -62,8 +76,9 @@
        HERO — photo background with Ken Burns + overlay
        Replace habibitakes-hero.jpg with your actual image file
        ============================================================ -->
+  <span id="main-content" tabindex="-1" aria-hidden="true" style="position:absolute;height:0;overflow:hidden"></span>
   <section id="ht-hero">
-    <div class="ht-hero-img"></div>
+    <div class="ht-hero-img" role="img" aria-label="HabibiTakes sign on a California hillside"></div>
     <div class="ht-hero-overlay"></div>
 
     <!-- Location badge — bottom left -->
@@ -95,7 +110,7 @@
           <p class="about-bio fade-in d2">
             <strong>HabibiTakes</strong> is a Southern California&ndash;based resale and
             distribution operation founded in 2019. Specializing in bulk product acquisition
-            and multi-channel liquidation, I&rsquo;ve moved over 10,000 units across Amazon,
+            and multi-channel liquidation, I&rsquo;ve moved over 10,000 units across
             eBay, Facebook Marketplace, OfferUp, and direct B2B buyers. From consumer goods to
             electronics to apparel &mdash; I source smart, move fast, and turn inventory at scale.
           </p>
@@ -137,7 +152,7 @@
       <div class="ht-links-grid">
 
         <!-- eBay -->
-        <a href="https://www.ebay.com/usr/habibitakes2" target="_blank" rel="noopener noreferrer" class="link-card lc-ebay fade-in">
+        <a href="https://www.ebay.com/usr/habibitakes2" target="_blank" rel="noopener noreferrer" class="link-card lc-ebay fade-in" aria-label="Visit HabibiTakes on eBay (opens in new tab)">
           <div class="lc-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
@@ -155,7 +170,7 @@
         </a>
 
         <!-- Instagram -->
-        <a href="https://www.instagram.com/habibitakes/" target="_blank" rel="noopener noreferrer" class="link-card lc-instagram fade-in d1">
+        <a href="https://www.instagram.com/habibitakes/" target="_blank" rel="noopener noreferrer" class="link-card lc-instagram fade-in d1" aria-label="Visit HabibiTakes on Instagram (opens in new tab)">
           <div class="lc-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -174,7 +189,7 @@
         </a>
 
         <!-- Facebook Marketplace -->
-        <a href="https://www.facebook.com/marketplace/profile/100002579779773/" target="_blank" rel="noopener noreferrer" class="link-card lc-facebook fade-in d2">
+        <a href="https://www.facebook.com/marketplace/profile/100002579779773/" target="_blank" rel="noopener noreferrer" class="link-card lc-facebook fade-in d2" aria-label="Visit HabibiTakes on Facebook Marketplace (opens in new tab)">
           <div class="lc-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
@@ -192,7 +207,7 @@
         </a>
 
         <!-- OfferUp -->
-        <a href="https://offerup.com/p/35720471" target="_blank" rel="noopener noreferrer" class="link-card lc-offerup fade-in d3">
+        <a href="https://offerup.com/p/35720471" target="_blank" rel="noopener noreferrer" class="link-card lc-offerup fade-in d3" aria-label="Visit HabibiTakes on OfferUp (opens in new tab)">
           <div class="lc-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
@@ -270,7 +285,7 @@
        FOOTER
        ============================================================ -->
   <footer>
-    <p>&copy; <span id="yr"></span> &mdash; HabibiTakes</p>
+    <p>&copy; <span id="yr">2026</span> &mdash; HabibiTakes</p>
   </footer>
 
 
@@ -356,7 +371,7 @@
           slide.className = 'ht-cs-slide' + (i === 0 ? ' active' : '');
           const img = document.createElement('img');
           img.src = src;
-          img.alt = 'HabibiTakes';
+          img.alt = 'HabibiTakes product photo ' + (i + 1);
           slide.appendChild(img);
           container.appendChild(slide);
         });
@@ -419,6 +434,67 @@
       slots.length = MAX;
       slots.fill(null);
       for (let i = 0; i < MAX; i++) loadSlot(i);
+    })();
+
+    /* ── Scroll progress bar ─────────────────────────────────────── */
+    (function () {
+      const bar = document.createElement('div');
+      bar.id = 'scroll-progress';
+      document.body.prepend(bar);
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (window.scrollY / (h.scrollHeight - h.clientHeight)) * 100;
+        bar.style.width = Math.min(pct, 100) + '%';
+      }, { passive: true });
+    })();
+
+    /* ── Animated stat counter ──────────────────────────────────── */
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.querySelectorAll('.stat-num').forEach(el => {
+        const raw = el.textContent.trim();
+        const num = Number(raw);
+        if (!Number.isFinite(num) || raw !== String(num)) return;
+        el.textContent = '0';
+        const counterIo = new IntersectionObserver(entries => {
+          if (!entries[0].isIntersecting) return;
+          counterIo.disconnect();
+          const start = performance.now();
+          const dur = 1500;
+          (function tick(now) {
+            const p = Math.min((now - start) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(eased * num);
+            if (p < 1) requestAnimationFrame(tick);
+          })(start);
+        }, { threshold: 0.5 });
+        counterIo.observe(el.closest('.stat-card') || el);
+      });
+    })();
+
+    /* ── Cursor trail (pointer: fine devices only) ────────────── */
+    (function () {
+      if (!window.matchMedia('(pointer: fine)').matches) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const DOTS = 8;
+      const trail = Array.from({ length: DOTS }, () => {
+        const d = document.createElement('div');
+        d.className = 'cursor-trail-dot';
+        document.body.appendChild(d);
+        return { el: d, x: -100, y: -100 };
+      });
+      let mx = -100, my = -100;
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+      (function tick() {
+        trail.forEach((dot, i) => {
+          const prev = i === 0 ? { x: mx, y: my } : trail[i - 1];
+          dot.x += (prev.x - dot.x) * 0.35;
+          dot.y += (prev.y - dot.y) * 0.35;
+          dot.el.style.transform = `translate(${dot.x}px,${dot.y}px)`;
+          dot.el.style.opacity = ((DOTS - i) / DOTS) * 0.6;
+        });
+        requestAnimationFrame(tick);
+      })();
     })();
 
     /* ── Contact form: Formspree async submission ─────────────────── */
