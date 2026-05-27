@@ -590,8 +590,8 @@ section { padding: 104px 0; }
    HABIBITAKES CIRCULAR SLIDESHOW
    ============================================== */
 .ht-circle-slideshow {
-  width: 370px;
-  height: 370px;
+  width: 460px;
+  height: 460px;
   border-radius: 50%;
   border: 3px solid var(--ht-accent, #3a8fd1);
   box-shadow: 0 0 24px rgba(58,143,209,0.3);
@@ -800,7 +800,7 @@ footer a:hover { color: var(--accent); }
   .hero-btn      { width: 220px; justify-content: center; }
   #ht-hero       { height: 50vh; }
 
-  .ht-circle-slideshow { width: 260px; height: 260px; }
+  .ht-circle-slideshow { width: 320px; height: 320px; }
 }
 
 /* ==============================================
