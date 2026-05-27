@@ -760,24 +760,36 @@ footer a:hover { color: var(--accent); }
 }
 
 /* ==============================================
+   RESPONSIVE — MOBILE NAV  (≤ 768px)
+   ============================================== */
+@media (max-width: 768px) {
+  .nav-links {
+    position: fixed; top: var(--nav-h); left: 0; right: 0;
+    background: rgba(253,246,238,.97); backdrop-filter: blur(14px);
+    flex-direction: column; gap: 0; padding: 0;
+    max-height: 0; overflow: hidden; opacity: 0;
+    transition: max-height .3s ease, opacity .3s ease, padding .3s ease;
+    box-shadow: 0 8px 28px rgba(44,31,20,.12); list-style: none;
+    pointer-events: none;
+  }
+  .nav-links.open {
+    max-height: 300px; opacity: 1; padding: 10px 0 18px;
+    pointer-events: auto;
+  }
+  .dark .nav-links { background: rgba(26,20,16,.97); box-shadow: 0 8px 28px rgba(0,0,0,.35); }
+  .nav-links a        { display: block; padding: 13px 28px; font-size: .98rem; }
+  .nav-links a::after { display: none; }
+  .nav-toggle         { display: flex; }
+  body.ht-page .nav-links      { background: rgba(240,246,252,0.97) !important; box-shadow: 0 8px 28px rgba(13,27,42,0.12) !important; }
+  body.ht-page.dark .nav-links { background: rgba(5,13,20,0.97) !important; }
+}
+
+/* ==============================================
    RESPONSIVE — MOBILE  (≤ 600px)
    ============================================== */
 @media (max-width: 600px) {
   section { padding: 72px 0; }
   .comp-grid { grid-template-columns: 1fr; }
-
-  .nav-links {
-    position: fixed; top: var(--nav-h); left: 0; right: 0;
-    background: rgba(253,246,238,.97); backdrop-filter: blur(14px);
-    flex-direction: column; gap: 0; padding: 10px 0 18px;
-    transform: translateY(-110%); transition: transform .35s cubic-bezier(.4,0,.2,1);
-    box-shadow: 0 8px 28px rgba(44,31,20,.12); list-style: none;
-  }
-  .dark .nav-links { background: rgba(26,20,16,.97); box-shadow: 0 8px 28px rgba(0,0,0,.35); }
-  .nav-links.open     { transform: translateY(0); }
-  .nav-links a        { display: block; padding: 13px 28px; font-size: .98rem; }
-  .nav-links a::after { display: none; }
-  .nav-toggle         { display: flex; }
 
   .links-grid    { grid-template-columns: 1fr; }
   .ht-links-grid { grid-template-columns: 1fr; }
@@ -789,10 +801,6 @@ footer a:hover { color: var(--accent); }
   #ht-hero       { height: 50vh; }
 
   .ht-circle-slideshow { width: 260px; height: 260px; }
-
-  /* Mobile nav dropdown for ht-page */
-  body.ht-page .nav-links      { background: rgba(240,246,252,0.97) !important; box-shadow: 0 8px 28px rgba(13,27,42,0.12) !important; }
-  body.ht-page.dark .nav-links { background: rgba(5,13,20,0.97) !important; }
 }
 
 /* ==============================================
@@ -848,3 +856,43 @@ body.ht-page .link-card::after {
 }
 body.ht-page .link-card:hover::after { animation: htShimmer 0.6s ease forwards; }
 @keyframes htShimmer { from { left: -75%; } to { left: 125%; } }
+
+/* ==============================================
+   TYPEWRITER CURSOR
+   ============================================== */
+.tw-typing::after {
+  content: '|';
+  animation: twBlink 0.7s step-end infinite;
+  color: var(--accent);
+  margin-left: 1px;
+}
+@keyframes twBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.ht-hero-tagline.tw-typing::after { color: rgba(255,255,255,0.75); }
+
+/* ==============================================
+   HERO GRAIN TEXTURE
+   ============================================== */
+#ht-hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none; opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat; background-size: 256px 256px;
+  z-index: 1;
+}
+
+/* ==============================================
+   HABIBITAKES HERO TAGLINE
+   ============================================== */
+.ht-hero-tagline {
+  position: absolute;
+  bottom: 5.5rem; left: 50%; transform: translateX(-50%);
+  z-index: 2;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+  opacity: 0; animation: htBadgeFade 0.5s ease 0.5s forwards;
+  min-height: 1em;
+}
