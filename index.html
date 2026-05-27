@@ -127,8 +127,8 @@
               <div class="stat-lbl">Orange County Original</div>
             </div>
             <div class="stat-card fade-in d3">
-              <div class="stat-num" style="font-size: 3.5rem; line-height: 1;">∞</div>
-              <div class="stat-lbl">Categories tried</div>
+              <div class="stat-num" id="stat-inf" style="font-size: 3.5rem; line-height: 1;">∞</div>
+              <div class="stat-lbl">Categories &amp; Counting</div>
             </div>
             <div class="stat-card fade-in d4">
               <div class="stat-num">30-90 Days</div>
@@ -545,6 +545,79 @@
         }, { threshold: 0.5 });
         counterIo.observe(el.closest('.stat-card') || el);
       });
+    })();
+
+    /* ── Infinity stat card animation ─────────────────────────────── */
+    (function () {
+      const el = document.getElementById('stat-inf');
+      if (!el) return;
+      const card = el.closest('.stat-card');
+      if (!card) return;
+
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let isAnimating = false;
+
+      function phase3() {
+        el.textContent = '∞';
+        el.style.fontVariantNumeric = '';
+        el.style.transition = 'none';
+        el.style.transform = 'scale(1.3)';
+        el.style.color = '#3a8fd1';
+        void el.offsetHeight;
+        el.style.transition = 'transform 0.3s ease-out, color 0.5s ease';
+        el.style.transform = 'scale(1)';
+        el.style.color = '';
+        setTimeout(() => {
+          el.style.transition = '';
+          el.style.transform = '';
+          el.style.minWidth = '';
+          isAnimating = false;
+        }, 600);
+      }
+
+      function runInfinityAnimation() {
+        if (isAnimating) return;
+        isAnimating = true;
+        el.style.minWidth = el.offsetWidth + 'px';
+
+        if (reduced) { phase3(); return; }
+
+        el.style.fontVariantNumeric = 'tabular-nums';
+        const PHASE1_INTERVAL = 80;
+        const PHASE1_STEPS = 15;
+        let step = 0;
+
+        const iv = setInterval(() => {
+          el.textContent = String(Math.floor(Math.random() * 10));
+          if (el.animate) {
+            el.animate(
+              [{ transform: 'scale(0.85)', opacity: 0.65 }, { transform: 'scale(1)', opacity: 1 }],
+              { duration: 70, easing: 'ease-out' }
+            );
+          }
+          step++;
+          if (step >= PHASE1_STEPS) {
+            clearInterval(iv);
+            setTimeout(() => {
+              el.textContent = String(Math.floor(Math.random() * 10));
+              setTimeout(() => {
+                el.textContent = String(Math.floor(Math.random() * 10));
+                setTimeout(phase3, 300);
+              }, 300);
+            }, 160);
+          }
+        }, PHASE1_INTERVAL);
+      }
+
+      const infIo = new IntersectionObserver(entries => {
+        if (!entries[0].isIntersecting) return;
+        infIo.disconnect();
+        runInfinityAnimation();
+      }, { threshold: 0.5 });
+      infIo.observe(card);
+
+      card.addEventListener('mouseenter', runInfinityAnimation);
+      card.addEventListener('touchstart', runInfinityAnimation, { passive: true });
     })();
 
     /* ── Cursor trail (pointer: fine devices only) ────────────── */
