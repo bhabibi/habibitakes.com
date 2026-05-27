@@ -15,16 +15,16 @@
 
   // ── Parse raw input into logical segments ──────────────────────────────────
   function parse(raw) {
-    const clean    = raw.replace(/[\s\-]/g, "").toUpperCase();
+    const clean      = raw.replace(/[\s\-]/g, "").toUpperCase();
     const digitMatch = clean.match(/^(\d+)/);
-    const digits   = digitMatch ? digitMatch[1] : "";
-    const suffix   = clean.slice(digits.length);
+    const digits     = digitMatch ? digitMatch[1] : "";
+    const suffix     = clean.slice(digits.length);
     return {
       era:      digits.slice(0, 2),
       modelKey: digits.slice(0, 6),
       modelSeg: digits.slice(2, 5),
-      bezelDig: digits[5] ?? "",
-      bracDig:  digits[6] ?? "",
+      bezelDig: digits[4] ?? "",   // 5th digit = bezel type code
+      bracDig:  digits[5] ?? "",   // 6th digit = bracelet / material variant code
       suffix,
       digits,
       full: clean
@@ -36,11 +36,12 @@
     const valueEl   = document.getElementById(valueId);
     const decodedEl = document.getElementById(decodedId);
 
-    valueEl.textContent   = value  || "—";
+    // Explicit null/empty check — prevents "0" from being treated as falsy
+    valueEl.textContent   = (value !== "" && value != null) ? value : "—";
     decodedEl.textContent = decoded || (found ? "" : "Unknown");
 
     box.setAttribute("data-state", "active");
-    box.classList.toggle("seg-unknown", !found && !!value);
+    box.classList.toggle("seg-unknown", !found && (value !== "" && value != null));
   }
 
   // ── Reset a box to waiting state ───────────────────────────────────────────
@@ -61,7 +62,6 @@
     void el.offsetWidth;
     el.style.animation = "cardSlideUp 350ms ease both";
 
-    // Scroll into view if below viewport
     setTimeout(() => {
       const rect = el.getBoundingClientRect();
       if (rect.bottom > window.innerHeight + 80) {
@@ -72,7 +72,7 @@
 
   // ── Build result card HTML ─────────────────────────────────────────────────
   function buildCard(parts, data) {
-    const { eraData, modelData, bezelData, bracData, suffixData } = data;
+    const { eraData, modelData, bezelData, bracData, suffixData, communityName } = data;
     const { era, bezelDig, bracDig, suffix, digits } = parts;
     let rowIdx = 0;
 
@@ -109,6 +109,14 @@
       <h2 class="card-model-name">${modelName}</h2>
       ${category ? `<span class="card-category">${category}</span>` : ""}
     </div>`;
+
+    // Community / enthusiast name — shown prominently below model name
+    if (communityName) {
+      html += `<div class="card-known-as">
+        <span class="known-as-label">Known As</span>
+        <p class="known-as-value">&ldquo;The ${communityName}&rdquo;</p>
+      </div>`;
+    }
 
     html += `<div class="card-grid">`;
     html += cRow("Case Material", material);
@@ -156,15 +164,16 @@
 
   // ── Copy summary to clipboard ──────────────────────────────────────────────
   function copySummary(parts, data) {
-    const { eraData, modelData, bezelData, bracData, suffixData } = data;
+    const { eraData, modelData, bezelData, bracData, suffixData, communityName } = data;
     const lines = [
       `Reference: ${parts.full}`,
       `Model: ${modelData?.name || "Unknown"}`,
+      communityName ? `Known As: "The ${communityName}"` : null,
       `Material: ${modelData?.material || "—"}`,
-      eraData  ? `Era: ${eraData.label} (${eraData.years})` : null,
-      bezelData ? `Bezel: ${bezelData.label}` : null,
+      eraData    ? `Era: ${eraData.label} (${eraData.years})` : null,
+      bezelData  ? `Bezel: ${bezelData.label}` : null,
       suffixData ? `Ceramic Bezel: ${suffixData.label}` : null,
-      bracData  ? `Bracelet: ${bracData.label}` : null,
+      bracData   ? `Bracelet: ${bracData.label}` : null,
       modelData?.significance ? `Note: ${modelData.significance}` : null,
     ].filter(Boolean);
 
@@ -181,14 +190,20 @@
     const parts = parse(raw);
     const { era, modelKey, modelSeg, bezelDig, bracDig, suffix, digits } = parts;
 
-    const eraData    = era      ? REF_DATA.era[era]          : null;
-    const modelData  = modelKey ? REF_DATA.model[modelKey]   : null;
-    const bezelData  = bezelDig ? REF_DATA.bezel[bezelDig]   : null;
-    const bracData   = bracDig  ? REF_DATA.bracelet[bracDig] : null;
-    const suffixData = suffix   ? REF_DATA.suffix[suffix]    : null;
+    // All lookups use explicit empty-string checks so digit "0" never gets skipped
+    const eraData    = era !== ""      ? REF_DATA.era[era]           : null;
+    const modelData  = modelKey !== "" ? REF_DATA.model[modelKey]    : null;
+    const bezelData  = bezelDig !== "" ? REF_DATA.bezel[bezelDig]    : null;
+    const bracData   = bracDig !== ""  ? REF_DATA.bracelet[bracDig]  : null;
+    const suffixData = suffix !== ""   ? REF_DATA.suffix[suffix]     : null;
+
+    // Community name: look up suffix-specific nickname first, then model-level default
+    const communityName = (modelData?.communityNames && suffix !== "")
+      ? (modelData.communityNames[suffix] ?? modelData.communityName ?? null)
+      : (modelData?.communityName ?? null);
 
     _lastParts = parts;
-    _lastData  = { eraData, modelData, bezelData, bracData, suffixData };
+    _lastData  = { eraData, modelData, bezelData, bracData, suffixData, communityName };
 
     // ── Era box ──────────────────────────────────────────────────────────
     if (digits.length >= 2) {
@@ -206,35 +221,39 @@
       waitBox(segModel, "seg-model-value", "seg-model-decoded", "- - -");
     }
 
-    // ── Bezel box ────────────────────────────────────────────────────────
-    if (digits.length >= 6) {
+    // ── Bezel box — activates at digit 5 (index 4) ──────────────────────
+    if (digits.length >= 5) {
       activateBox(segBezel, "seg-bezel-value", "seg-bezel-decoded", bezelDig, bezelData?.label, !!bezelData);
     } else {
       waitBox(segBezel, "seg-bezel-value", "seg-bezel-decoded", "-");
     }
 
-    // ── Bracelet box ─────────────────────────────────────────────────────
-    if (digits.length >= 7) {
+    // ── Bracelet box — activates at digit 6 (index 5) ───────────────────
+    if (digits.length >= 6) {
       activateBox(segBracelet, "seg-bracelet-value", "seg-bracelet-decoded", bracDig, bracData?.label, !!bracData);
     } else {
       waitBox(segBracelet, "seg-bracelet-value", "seg-bracelet-decoded", "-");
     }
 
     // ── Suffix box ───────────────────────────────────────────────────────
-    if (suffix) {
+    if (suffix !== "") {
       activateBox(segSuffix, "seg-suffix-value", "seg-suffix-decoded", suffix, suffixData?.label, !!suffixData);
+      // Add community nickname as a secondary line in the suffix box
+      if (communityName) {
+        const decodedEl = document.getElementById("seg-suffix-decoded");
+        decodedEl.innerHTML = `${suffixData ? suffixData.label : suffix}<br><span class="seg-community-name">&ldquo;The ${communityName}&rdquo;</span>`;
+      }
     } else {
       waitBox(segSuffix, "seg-suffix-value", "seg-suffix-decoded", "- -");
     }
 
     // ── Result card ──────────────────────────────────────────────────────
     if (digits.length >= 6) {
-      const cardHTML = buildCard(parts, { eraData, modelData, bezelData, bracData, suffixData });
+      const cardHTML = buildCard(parts, { eraData, modelData, bezelData, bracData, suffixData, communityName });
       if (cardHTML) {
         resultCard.innerHTML = cardHTML;
         showCard(resultCard);
 
-        // Wire up copy button after card renders
         const copyBtn = document.getElementById("copy-summary-btn");
         if (copyBtn) {
           copyBtn.addEventListener("click", () => copySummary(_lastParts, _lastData));
@@ -271,7 +290,6 @@
     btn.addEventListener("click", function (e) {
       e.stopPropagation();
       const isOpen = this.getAttribute("aria-expanded") === "true";
-      // Close all others
       document.querySelectorAll(".seg-info-btn").forEach(b => b.setAttribute("aria-expanded", "false"));
       this.setAttribute("aria-expanded", isOpen ? "false" : "true");
     });
@@ -291,7 +309,6 @@
         }
       });
 
-      // No-results message per card
       document.querySelectorAll(".ref-card").forEach(card => {
         const tbody = card.querySelector("tbody");
         if (!tbody) return;
@@ -323,7 +340,6 @@
     }
   }, 1000);
 
-  // Cancel example if user interacts before it fires
   input.addEventListener("keydown", function () {
     if (exampleActive) return;
     clearTimeout(exampleTimer);
