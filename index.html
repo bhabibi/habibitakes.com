@@ -25,6 +25,13 @@
   <meta name="twitter:description" content="Southern California resale and distribution. Bulk acquisition and multi-channel liquidation." />
   <meta name="twitter:image" content="https://habibitakes.com/assets/HT_THUMB.png" />
   <link rel="canonical" href="https://habibitakes.com" />
+  <script>
+    window.SITE_ID    = 'ht';
+    window.SITE_NAME  = 'HabibiTakes';
+    window.SITE_EMOJI = '🎬';
+    window.SITE_COLOR = 0x3a8fd1;
+  </script>
+  <script defer src="analytics.js"></script>
 </head>
 <body class="ht-page">
 
@@ -36,7 +43,7 @@
   <nav id="navbar">
     <div class="nav-inner">
       <div class="nav-switcher">
-        <a href="https://bryanhabibi.com" class="switcher-btn" aria-label="Go to Bryan Habibi site">Bryan Habibi</a>
+        <a href="https://bryanhabibi.com" class="switcher-btn" aria-label="Go to Bryan Habibi site" data-track="nav-to-bryan">Bryan Habibi</a>
         <a href="https://habibitakes.com" class="switcher-btn switcher-ht active" aria-label="Go to HabibiTakes site">
           <img src="assets/habibitakes-button.jpg" alt="HabibiTakes logo" class="ht-btn-img" />
         </a>
@@ -159,7 +166,7 @@
       <div class="ht-links-grid">
 
         <!-- eBay -->
-        <a href="https://www.ebay.com/usr/habibitakes2" target="_blank" rel="noopener noreferrer" class="link-card lc-ebay fade-in" aria-label="Visit HabibiTakes on eBay (opens in new tab)">
+        <a href="https://www.ebay.com/usr/habibitakes2" target="_blank" rel="noopener noreferrer" class="link-card lc-ebay fade-in" aria-label="Visit HabibiTakes on eBay (opens in new tab)" data-track="link-ebay">
           <div class="lc-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
@@ -177,7 +184,7 @@
         </a>
 
         <!-- Instagram -->
-        <a href="https://www.instagram.com/habibitakes/" target="_blank" rel="noopener noreferrer" class="link-card lc-instagram fade-in d1" aria-label="Visit HabibiTakes on Instagram (opens in new tab)">
+        <a href="https://www.instagram.com/habibitakes/" target="_blank" rel="noopener noreferrer" class="link-card lc-instagram fade-in d1" aria-label="Visit HabibiTakes on Instagram (opens in new tab)" data-track="link-instagram">
           <div class="lc-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -196,7 +203,7 @@
         </a>
 
         <!-- Facebook Marketplace -->
-        <a href="https://www.facebook.com/marketplace/profile/100002579779773/" target="_blank" rel="noopener noreferrer" class="link-card lc-facebook fade-in d2" aria-label="Visit HabibiTakes on Facebook Marketplace (opens in new tab)">
+        <a href="https://www.facebook.com/marketplace/profile/100002579779773/" target="_blank" rel="noopener noreferrer" class="link-card lc-facebook fade-in d2" aria-label="Visit HabibiTakes on Facebook Marketplace (opens in new tab)" data-track="link-facebook">
           <div class="lc-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
@@ -214,7 +221,7 @@
         </a>
 
         <!-- OfferUp -->
-        <a href="https://offerup.com/p/35720471" target="_blank" rel="noopener noreferrer" class="link-card lc-offerup fade-in d3" aria-label="Visit HabibiTakes on OfferUp (opens in new tab)">
+        <a href="https://offerup.com/p/35720471" target="_blank" rel="noopener noreferrer" class="link-card lc-offerup fade-in d3" aria-label="Visit HabibiTakes on OfferUp (opens in new tab)" data-track="link-offerup">
           <div class="lc-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
@@ -273,7 +280,7 @@
             <p class="form-note">Your message goes straight to my inbox.<br/>I typically respond within 24&ndash;48 hours.</p>
           </form>
 
-          <div id="form-success">
+          <div id="form-success" data-fs-success>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
               <polyline points="22 4 12 14.01 9 11.01"/>
