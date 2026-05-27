@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" href="assets/HT_THUMB.png" />
 </head>
 <body class="ht-page">
 
@@ -232,7 +233,7 @@
 
         <!-- Replace REPLACE_WITH_YOUR_ID with your Formspree form ID -->
         <div class="contact-form fade-in d2">
-          <form id="contactForm" novalidate>
+          <form id="contact-form-ht" novalidate>
             <div class="form-row">
               <label for="fname">Your Name</label>
               <input type="text" id="fname" name="name" placeholder="Johnny Appleseed" required />
@@ -245,7 +246,7 @@
               <label for="fmessage">Message</label>
               <textarea id="fmessage" name="message" placeholder="Tell me what you&rsquo;re looking for…" required></textarea>
             </div>
-            <button type="submit" class="submit-btn">Send Message &rarr;</button>
+            <button type="submit" class="submit-btn" data-fs-submit-btn>Send Message &rarr;</button>
             <div id="form-error"></div>
             <p class="form-note">Your message goes straight to my inbox.<br/>I typically respond within 24&ndash;48 hours.</p>
           </form>
@@ -420,10 +421,8 @@
       for (let i = 0; i < MAX; i++) loadSlot(i);
     })();
 
-    /* ── Contact form: Formspree async submission ─────────────────
-       Replace REPLACE_WITH_YOUR_ID with your Formspree form ID.
-    ─────────────────────────────────────────────────────────────── */
-    const form    = document.getElementById('contactForm');
+    /* ── Contact form: Formspree async submission ─────────────────── */
+    const form    = document.getElementById('contact-form-ht');
     const success = document.getElementById('form-success');
     const errEl   = document.getElementById('form-error');
 
@@ -434,13 +433,13 @@
       const message = form.message.value.trim();
       if (!name || !email || !message) return;
 
-      const btn = form.querySelector('.submit-btn');
-      btn.textContent     = 'Almost There...';
+      const btn = form.querySelector('[data-fs-submit-btn]');
+      btn.textContent     = 'Sending...';
       btn.disabled        = true;
       errEl.style.display = 'none';
 
       try {
-        const res = await fetch('https://formspree.io/f/REPLACE_WITH_YOUR_ID', {
+        const res = await fetch('https://formspree.io/f/mvzyvnvv', {
           method:  'POST',
           headers: { 'Accept': 'application/json' },
           body:    new FormData(form)
@@ -458,7 +457,7 @@
       } catch (err) {
         const isNetwork = err instanceof TypeError;
         errEl.textContent   = isNetwork
-          ? 'Unable to send — please check your connection and try again.'
+          ? 'Unable to send — please email contact@habibitakes.com directly.'
           : (err.message || 'Something went wrong. Please try again.');
         errEl.style.display = 'block';
         btn.textContent     = 'Send Message →';
