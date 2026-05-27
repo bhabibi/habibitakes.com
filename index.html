@@ -414,48 +414,79 @@
           if (capText) {
             const cap = document.createElement('div');
             cap.className = 'ht-cs-caption';
-            cap.textContent = capText;
+            const capInner = document.createElement('p');
+            capInner.className = 'ht-cs-caption-text';
+            capInner.textContent = capText;
+            cap.appendChild(capInner);
             slide.appendChild(cap);
           }
           container.appendChild(slide);
         });
 
+        /* State */
+        const slides = container.querySelectorAll('.ht-cs-slide');
+        let cur = 0;
+        let lbOpen = false;
+        let advanceTimer = null;
+
+        /* Advance by dir (+1 forward, -1 back) */
+        function advanceSlide(dir) {
+          slides[cur].classList.remove('active');
+          cur = (cur + dir + slides.length) % slides.length;
+          slides[cur].classList.add('active');
+          if (lbOpen) syncLightbox();
+        }
+
+        /* Reset the 4-second auto-advance timer */
+        function scheduleAdvance() {
+          clearTimeout(advanceTimer);
+          if (slides.length > 1) {
+            advanceTimer = setTimeout(() => { advanceSlide(1); scheduleAdvance(); }, 4000);
+          }
+        }
+
         /* Lightbox */
         const lb = document.createElement('div');
         lb.className = 'ht-lightbox';
-        lb.innerHTML = '<button class="ht-lightbox-close" aria-label="Close">×<\/button><img alt="HabibiTakes">';
+        lb.innerHTML =
+          '<button class="ht-lightbox-close" aria-label="Close">&times;<\/button>' +
+          '<button class="ht-lb-arrow ht-lb-prev" aria-label="Previous photo">&#8249;<\/button>' +
+          '<div class="ht-lb-content"><img alt="HabibiTakes"><p class="ht-lb-caption"><\/p><\/div>' +
+          '<button class="ht-lb-arrow ht-lb-next" aria-label="Next photo">&#8250;<\/button>';
         document.body.appendChild(lb);
-        const lbImg   = lb.querySelector('img');
-        const lbClose = lb.querySelector('.ht-lightbox-close');
-        let paused = false;
 
-        const openLb = () => {
-          const active = container.querySelector('.ht-cs-slide.active img');
-          if (!active) return;
-          lbImg.src = active.src;
-          lb.classList.add('open');
-          paused = true;
-        };
-        const closeLb = () => { lb.classList.remove('open'); paused = false; };
+        const lbImg     = lb.querySelector('.ht-lb-content img');
+        const lbCaption = lb.querySelector('.ht-lb-caption');
+        const lbClose   = lb.querySelector('.ht-lightbox-close');
+        const lbPrev    = lb.querySelector('.ht-lb-prev');
+        const lbNext    = lb.querySelector('.ht-lb-next');
+
+        function syncLightbox() {
+          const activeImg = slides[cur].querySelector('img');
+          const activeCap = slides[cur].querySelector('.ht-cs-caption-text');
+          if (activeImg) lbImg.src = activeImg.src;
+          lbCaption.textContent = activeCap ? activeCap.textContent : '';
+        }
+
+        const openLb = () => { lbOpen = true; syncLightbox(); lb.classList.add('open'); };
+        const closeLb = () => { lb.classList.remove('open'); lbOpen = false; };
 
         container.addEventListener('click', openLb);
         container.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openLb(); });
-        lbClose.addEventListener('click', e => { e.stopPropagation(); closeLb(); });
         lb.addEventListener('click', closeLb);
-        lbImg.addEventListener('click', e => e.stopPropagation());
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+        lb.querySelector('.ht-lb-content').addEventListener('click', e => e.stopPropagation());
+        lbClose.addEventListener('click', e => { e.stopPropagation(); closeLb(); });
+        lbPrev.addEventListener('click', e => { e.stopPropagation(); advanceSlide(-1); scheduleAdvance(); });
+        lbNext.addEventListener('click', e => { e.stopPropagation(); advanceSlide(1);  scheduleAdvance(); });
+        document.addEventListener('keydown', e => {
+          if (!lbOpen) return;
+          if (e.key === 'Escape')      closeLb();
+          else if (e.key === 'ArrowLeft')  { advanceSlide(-1); scheduleAdvance(); }
+          else if (e.key === 'ArrowRight') { advanceSlide(1);  scheduleAdvance(); }
+        });
 
-        /* Crossfade interval */
-        const slides = container.querySelectorAll('.ht-cs-slide');
-        let cur = 0;
-        if (slides.length > 1) {
-          setInterval(() => {
-            if (paused) return;
-            slides[cur].classList.remove('active');
-            cur = (cur + 1) % slides.length;
-            slides[cur].classList.add('active');
-          }, 4000);
-        }
+        /* Start auto-advance */
+        if (slides.length > 1) scheduleAdvance();
       }
 
       /* Preload images 1–20. Try .jpeg → .jpg → .JPG per slot; first hit wins. */
