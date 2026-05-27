@@ -172,7 +172,6 @@
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'hidden') sendSessionEnd();
   });
-  window.addEventListener('beforeunload', sendSessionEnd);
 
   // ── 3. CONTACT FORM ──────────────────────────────
   function watchContactForm() {
