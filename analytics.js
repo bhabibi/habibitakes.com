@@ -1,8 +1,14 @@
-// habibi-analytics v2.0
+// habibi-analytics v2.1
 // Pure admin backend — invisible to all visitors
 // Sends data to Discord via Cloudflare Worker proxy
 // Zero user-facing output, zero performance impact
 // Proxy: https://noisy-breeze-fcbd.bball9001.workers.dev
+//
+// WORKER ACTION REQUIRED:
+// Add to WEBHOOKS in noisy-breeze-fcbd Worker:
+// bot: 'https://discord.com/api/webhooks/
+// 1510025583189430413/R2F4_RPvs5sob0XivHwY8z3_
+// wf2Z3GB2WNcip__V1vR65niQHfqd_AO0Ak_uRCmv1Nuw'
 
 (function () {
   const PROXY = 'https://noisy-breeze-fcbd.bball9001.workers.dev';
@@ -77,6 +83,131 @@
     catch (e) {}
   }
 
+  // ── BOT DETECTION ────────────────────────────────
+  const botDetection = {
+    score: 0,
+    signals: [],
+
+    add: function(points, reason) {
+      this.score += points;
+      this.signals.push(reason);
+      saveSession();
+    },
+
+    classify: function() {
+      if (this.score >= 8)  return { label: '🟢 Human',      level: 'human'     };
+      if (this.score >= 4)  return { label: '🟡 Uncertain',  level: 'uncertain' };
+      return                       { label: '🔴 Likely Bot', level: 'bot'       };
+    }
+  };
+
+  // Restore score from session storage if present
+  if (session.botScore !== undefined) {
+    botDetection.score   = session.botScore;
+    botDetection.signals = session.botSignals || [];
+  }
+
+  function saveBotScore() {
+    session.botScore   = botDetection.score;
+    session.botSignals = botDetection.signals;
+    saveSession();
+  }
+
+  // ── INSTANT BOT FLAGS ────────────────────────────
+  // navigator.webdriver = true means headless browser
+  if (navigator.webdriver === true) {
+    botDetection.add(-5, 'webdriver=true');
+  }
+
+  // Headless Chrome leaves these undefined
+  if (!window.chrome && navigator.userAgent.includes('Chrome')) {
+    botDetection.add(-3, 'no-chrome-obj');
+  }
+
+  // Real browsers have plugins
+  if (navigator.plugins.length === 0) {
+    botDetection.add(-2, 'no-plugins');
+  }
+
+  // Real browsers have languages set
+  if (!navigator.languages || navigator.languages.length === 0) {
+    botDetection.add(-2, 'no-languages');
+  }
+
+  // Canvas fingerprint — headless renders differently
+  try {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.textBaseline = 'top';
+    ctx.font = '14px Arial';
+    ctx.fillText('habibi', 2, 2);
+    const data = canvas.toDataURL();
+    if (data && data.length > 100) {
+      botDetection.add(2, 'canvas-ok');
+    }
+  } catch(e) {
+    botDetection.add(-2, 'canvas-fail');
+  }
+
+  saveBotScore();
+
+  // ── BEHAVIORAL SIGNALS ───────────────────────────
+  // Each signal only scores once per session
+  const _scored = new Set(session.botSignals || []);
+
+  function scoreOnce(key, points, reason) {
+    if (_scored.has(key)) return;
+    _scored.add(key);
+    botDetection.add(points, reason);
+    saveBotScore();
+  }
+
+  // Mouse movement — bots rarely move the mouse
+  window.addEventListener('mousemove', function() {
+    scoreOnce('mousemove', 2, 'mouse-moved');
+  }, { passive: true, once: true });
+
+  // Scroll — bots rarely scroll
+  window.addEventListener('scroll', function() {
+    scoreOnce('scroll', 2, 'scrolled');
+  }, { passive: true, once: true });
+
+  // Keyboard — bots rarely type naturally
+  window.addEventListener('keydown', function() {
+    scoreOnce('keydown', 1, 'keydown');
+  }, { passive: true, once: true });
+
+  // Touch — always human on mobile
+  window.addEventListener('touchstart', function() {
+    scoreOnce('touch', 2, 'touch');
+  }, { passive: true, once: true });
+
+  // Window focus/blur — real browsers fire these
+  window.addEventListener('blur', function() {
+    scoreOnce('blur', 1, 'window-blur');
+  }, { passive: true, once: true });
+
+  // Time on page > 5 seconds — bots are fast
+  setTimeout(function() {
+    scoreOnce('time5s', 2, '5s-on-page');
+  }, 5000);
+
+  // First interaction timing — under 200ms = bot
+  var pageLoadTime = Date.now();
+  function checkFirstInteraction() {
+    var elapsed = Date.now() - pageLoadTime;
+    if (elapsed < 200) {
+      botDetection.add(-5, 'interaction-too-fast');
+      saveBotScore();
+    }
+    window.removeEventListener('mousemove', checkFirstInteraction);
+    window.removeEventListener('scroll',    checkFirstInteraction);
+    window.removeEventListener('keydown',   checkFirstInteraction);
+  }
+  window.addEventListener('mousemove', checkFirstInteraction, { once: true });
+  window.addEventListener('scroll',    checkFirstInteraction, { once: true });
+  window.addEventListener('keydown',   checkFirstInteraction, { once: true });
+
   // ── DAILY COUNTERS ───────────────────────────────
   const TODAY = new Date().toDateString();
   const DAILY_KEY = 'hb_daily_' + TODAY;
@@ -102,13 +233,64 @@
   }
 
   // ── DISCORD SENDER ───────────────────────────────
+  // Fixed channels — never rerouted regardless of bot score
+  var STATIC_CHANS = { contact: true, digest: true };
+
   async function send(channel, payload, keepalive) {
     try {
+      // Inject bot score into every embed (immutable — new objects)
+      var cls = botDetection.classify();
+      var botScoreField = {
+        name: '🤖 Bot Score',
+        value: botDetection.score + '/15 — ' + cls.label,
+        inline: true
+      };
+
+      var enrichedPayload = payload;
+      if (payload && payload.embeds && payload.embeds.length) {
+        enrichedPayload = {
+          embeds: payload.embeds.map(function(embed) {
+            return Object.assign({}, embed, {
+              fields: (embed.fields || []).concat([botScoreField])
+            });
+          })
+        };
+      }
+
+      // Channel routing — only for site channels (bryan / ht)
+      var dest = channel;
+      if (!STATIC_CHANS[channel]) {
+        if (cls.level === 'bot') {
+          dest = 'bot';
+          if (enrichedPayload.embeds && enrichedPayload.embeds.length) {
+            var firstEmbed = enrichedPayload.embeds[0];
+            enrichedPayload.embeds = [Object.assign({}, firstEmbed, {
+              fields: (firstEmbed.fields || []).concat([{
+                name: '⚠️ Bot Traffic',
+                value: 'Signals: ' + botDetection.signals.join(', '),
+                inline: false
+              }])
+            })].concat(enrichedPayload.embeds.slice(1));
+          }
+        } else if (cls.level === 'uncertain') {
+          if (enrichedPayload.embeds && enrichedPayload.embeds.length) {
+            var firstEmbed = enrichedPayload.embeds[0];
+            enrichedPayload.embeds = [Object.assign({}, firstEmbed, {
+              fields: (firstEmbed.fields || []).concat([{
+                name: '⚠️ Uncertain',
+                value: 'Score ' + botDetection.score + ' — monitor this session',
+                inline: true
+              }])
+            })].concat(enrichedPayload.embeds.slice(1));
+          }
+        }
+      }
+
       await fetch(PROXY, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         keepalive: !!keepalive,
-        body: JSON.stringify({ channel, payload })
+        body: JSON.stringify({ channel: dest, payload: enrichedPayload })
       });
     } catch (e) { /* fail silently always */ }
   }
