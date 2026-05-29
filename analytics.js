@@ -526,10 +526,63 @@
     }, msLeft);
   }
 
+  // ── 8. HONEYPOT INTERCEPTOR ──────────────────────
+  function initHoneypot() {
+    const forms = document.querySelectorAll('form[id^="contact-form"]');
+
+    forms.forEach(function(form) {
+      form.addEventListener('submit', function(e) {
+        const honeypot = form.querySelector('[name="website"]');
+        const tsField  = form.querySelector('[name="_timestamp"]');
+
+        const honeypotFilled = honeypot && honeypot.value.trim() !== '';
+        const submitTime     = tsField && tsField.value
+          ? Date.now() - parseInt(tsField.value) : 9999;
+        const tooFast        = submitTime < 3000;
+
+        if (honeypotFilled || tooFast) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+
+          // Show fake success so bot doesn't retry
+          const successEl = document.querySelector('[data-fs-success]');
+          if (successEl) {
+            successEl.style.display = 'block';
+            form.style.display = 'none';
+          }
+
+          const reason = honeypotFilled
+            ? 'Honeypot field filled'
+            : 'Form submitted in ' + submitTime + 'ms (under 3s)';
+
+          send('bot', {
+            embeds: [{
+              color: 0xe74c3c,
+              author: { name: '🚫 Bot Form Blocked — ' + SITE_NAME },
+              fields: [
+                { name: '⚠️ Reason',    value: reason,                                               inline: true },
+                { name: '🕐 Time',      value: formatTime(),                                         inline: true },
+                { name: '🤖 Bot Score', value: botDetection.score + '/15 — ' + botDetection.classify().label, inline: true }
+              ],
+              footer: { text: 'Submission blocked — fake success shown to bot' }
+            }]
+          });
+
+          return false;
+        }
+
+        // Real human — score +3
+        botDetection.add(3, 'form-human-timing');
+        saveBotScore();
+      }, true); // capture phase — runs before Formspree handler
+    });
+  }
+
   // ── INIT ─────────────────────────────────────────
   window.addEventListener('DOMContentLoaded', function () {
     sendVisit();
     watchContactForm();
+    initHoneypot();
     initClickTracking();
     initScrollDepth();
     scheduleDailyDigest();

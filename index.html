@@ -278,6 +278,12 @@
             <button type="submit" class="submit-btn" data-fs-submit-btn>Send Message &rarr;</button>
             <div id="form-error"></div>
             <p class="form-note">Your message goes straight to my inbox.<br/>I typically respond within 24&ndash;48 hours.</p>
+            <!-- Honeypot — hidden from real users, bots auto-fill it -->
+            <div style="position:absolute;left:-9999px;height:0;overflow:hidden;" aria-hidden="true">
+              <label for="website">Leave this empty</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+            </div>
+            <input type="hidden" name="_timestamp" value="" />
           </form>
 
           <div id="form-success" data-fs-success>
@@ -614,6 +620,15 @@
         setTimeout(() => { window.location.href = href; }, 300);
       });
     });
+
+    /* ── Honeypot timestamp ─────────────────────────────────────────── */
+    (function () {
+      const formEl  = document.getElementById('contact-form-ht');
+      const tsField = formEl.querySelector('[name="_timestamp"]');
+      formEl.addEventListener('focusin', function () {
+        if (!tsField.value) tsField.value = Date.now();
+      }, { once: true });
+    })();
 
     /* ── Contact form: Formspree async submission ─────────────────── */
     const form    = document.getElementById('contact-form-ht');
