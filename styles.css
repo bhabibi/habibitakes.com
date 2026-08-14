@@ -941,3 +941,130 @@ body.ht-page .link-card:hover::after { animation: htShimmer 0.6s ease forwards; 
   margin: 0;
   width: 100%;
 }
+
+/* ── Price Errors! link card ─────────────────────────────────── */
+.price-errors-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 0.5px solid var(--ht-border);
+  background: var(--ht-surface);
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+/* Barber pole background — hidden at rest */
+.pe-barber-bg {
+  position: absolute;
+  inset: -4px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #ff4444 0px,
+    #ff4444 12px,
+    #ff9900 12px,
+    #ff9900 24px,
+    #ffdd00 24px,
+    #ffdd00 36px,
+    #44cc44 36px,
+    #44cc44 48px,
+    #4499ff 48px,
+    #4499ff 60px,
+    #aa44ff 60px,
+    #aa44ff 72px
+  );
+  background-size: 102px 102px;
+  opacity: 0;
+  filter: blur(8px);
+  transition: opacity 0.4s ease, filter 0.4s ease;
+  animation: none;
+  z-index: 0;
+}
+
+/* Animate the barber pole stripes on hover */
+@keyframes barberPole {
+  from { background-position: 0 0; }
+  to   { background-position: 102px 102px; }
+}
+
+.price-errors-card:hover .pe-barber-bg,
+.price-errors-card:focus-visible .pe-barber-bg {
+  opacity: 1;
+  filter: blur(12px);
+  animation: barberPole 1.2s linear infinite;
+}
+
+/* Dark overlay so text stays readable */
+.pe-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: transparent;
+  transition: background 0.3s ease;
+}
+
+.price-errors-card:hover .pe-content {
+  background: rgba(0, 0, 0, 0.38);
+  border-radius: 11px;
+}
+
+body.ht-page.dark .price-errors-card:hover .pe-content {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.pe-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.pe-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pe-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ht-text);
+  transition: color 0.3s ease;
+}
+
+.pe-desc {
+  font-size: 11px;
+  color: var(--ht-text-muted);
+  margin-top: 1px;
+  transition: color 0.3s ease;
+}
+
+.pe-arrow {
+  font-size: 14px;
+  color: var(--ht-text-muted);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* On hover — text turns white over the gradient */
+.price-errors-card:hover .pe-title,
+.price-errors-card:hover .pe-desc,
+.price-errors-card:hover .pe-arrow {
+  color: #ffffff;
+}
+
+.price-errors-card:hover .pe-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pe-barber-bg {
+    animation: none !important;
+  }
+  .price-errors-card:hover .pe-barber-bg {
+    opacity: 0.6;
+    filter: blur(10px);
+  }
+}
