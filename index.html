@@ -10,8 +10,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" as="style" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="preload" href="assets/habibitakes-hero.jpg" as="image" fetchpriority="high" />
-  <link rel="stylesheet" href="styles.css" />
   <link rel="icon" type="image/png" href="assets/HT_THUMB.png" />
   <link rel="apple-touch-icon" href="assets/HT_THUMB.png" />
   <meta name="description" content="HabibiTakes — Anaheim Hills, CA resale and distribution. Independent sourcing, bulk acquisition and multi-channel sales across eBay, Facebook Marketplace, OfferUp, and B2B since 2019. Margins 150–300%." />
@@ -32,8 +30,394 @@
     window.SITE_COLOR = 0x3a8fd1;
   </script>
   <script defer src="analytics.js"></script>
+
+  <style>
+    /* ============================================================
+       HabibiTakes — minimal dark-only link hub
+       ============================================================ */
+    :root {
+      --bg:            #0d0d0d;
+      --card:          #111111;
+      --surface2:      #161616;
+      --text:          #f0ece6;
+      --muted:         #666666;
+      --faint:         #444444;
+      --border:        #222222;
+      --border-subtle: #2a2a2a;
+      --accent:        #3a8fd1;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans:  'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      opacity: 0;
+      animation: pageIn 0.6s ease forwards;
+    }
+    @keyframes pageIn { to { opacity: 1; } }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Skip link ─────────────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 0 0 8px 0;
+      z-index: 100;
+      font-size: 13px;
+    }
+    .skip-link:focus { left: 0; }
+
+    /* ── Focus indicators (ADA) ────────────────────────────────── */
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* ── Navigation ────────────────────────────────────────────── */
+    #navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(13, 13, 13, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 0.5px solid var(--border);
+      padding: 12px 16px;
+    }
+    .nav-inner {
+      max-width: 500px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .nav-switcher { display: flex; gap: 8px; }
+    .switcher-btn {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 13px;
+      border-radius: 999px;
+      border: 0.5px solid var(--border-subtle);
+      color: var(--muted);
+      white-space: nowrap;
+      transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+    }
+    .switcher-btn:hover { border-color: var(--accent); color: var(--text); }
+    .switcher-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ── Layout shell ──────────────────────────────────────────── */
+    .wrap {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* ── Card base ─────────────────────────────────────────────── */
+    .card {
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+    }
+
+    /* ── Hero ──────────────────────────────────────────────────── */
+    .hero {
+      padding: 28px;
+      text-align: center;
+    }
+    .hero-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 14px;
+      border: 0.5px solid #2a4060;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 14px;
+    }
+    .hero-name {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .hero-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .hero-loc {
+      font-size: 10px;
+      color: var(--faint);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Price Errors button ───────────────────────────────────── */
+    .price-errors-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      display: block;
+    }
+    .pe-barber-bg {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        #ff4444 0px, #ff4444 10px,
+        #ff9500 10px, #ff9500 20px,
+        #ffcc00 20px, #ffcc00 30px,
+        #34c759 30px, #34c759 40px,
+        #007aff 40px, #007aff 50px,
+        #af52de 50px, #af52de 60px
+      );
+      background-size: 84px 84px;
+      opacity: 0;
+      filter: blur(10px);
+      transition: opacity 0.4s ease;
+      animation: none;
+      z-index: 0;
+    }
+    @keyframes barberPole {
+      from { background-position: 0 0; }
+      to   { background-position: 60px 60px; }
+    }
+    .price-errors-card:hover .pe-barber-bg,
+    .price-errors-card:focus-visible .pe-barber-bg {
+      opacity: 1;
+      animation: barberPole 1s linear infinite;
+    }
+    .pe-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 0.5px solid #333;
+      border-radius: 12px;
+      transition: background 0.3s ease;
+    }
+    .price-errors-card:hover .pe-content { background: rgba(0, 0, 0, 0.5); }
+    .pe-left { display: flex; align-items: center; gap: 10px; }
+    .pe-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #1a1a1a;
+      border: 0.5px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .pe-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      transition: color 0.3s ease;
+    }
+    .pe-desc {
+      font-size: 11px;
+      color: #555;
+      transition: color 0.3s ease;
+    }
+    .pe-arrow {
+      font-size: 13px;
+      color: var(--faint);
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .price-errors-card:hover .pe-title { color: #fff; }
+    .price-errors-card:hover .pe-desc  { color: #aaa; }
+    .price-errors-card:hover .pe-arrow { transform: translate(2px, -2px); }
+
+    /* ── Link cards ────────────────────────────────────────────── */
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .link-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      transition: border-color 0.25s ease;
+    }
+    .lc-left { display: flex; align-items: center; gap: 10px; }
+    .lc-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #1a1a1a;
+      border: 0.5px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .lc-name { font-size: 13px; font-weight: 500; color: var(--text); }
+    .lc-desc { font-size: 10px; color: #555; margin-top: 1px; }
+    .lc-arrow { font-size: 12px; color: var(--faint); flex-shrink: 0; }
+    .lc-ebay:hover     { border-color: #e53238; }
+    .lc-instagram:hover{ border-color: #c13584; }
+    .lc-facebook:hover { border-color: #1877f2; }
+    .lc-offerup:hover  { border-color: #3a8fd1; }
+
+    /* ── Contact form ──────────────────────────────────────────── */
+    .contact { padding: 18px; }
+    .contact-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    .contact-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+    #contact-form-ht input,
+    #contact-form-ht textarea {
+      width: 100%;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--surface2);
+      border: 0.5px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0 12px;
+    }
+    #contact-form-ht input { height: 34px; }
+    #contact-form-ht textarea {
+      height: 72px;
+      padding: 9px 12px;
+      resize: vertical;
+      margin-top: 7px;
+      margin-bottom: 10px;
+    }
+    #contact-form-ht input::placeholder,
+    #contact-form-ht textarea::placeholder { color: var(--faint); }
+    #contact-form-ht input:focus,
+    #contact-form-ht textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .submit-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 9px 20px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .submit-btn:hover { background: #2a7abf; }
+    .submit-btn:disabled { opacity: 0.6; cursor: default; }
+    #form-error {
+      display: none;
+      color: #e05a5a;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    .form-note {
+      font-size: 11px;
+      color: #555;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+    #form-success {
+      display: none;
+      text-align: center;
+      padding: 10px 0;
+    }
+    #form-success svg { width: 40px; height: 40px; color: var(--accent); }
+    #form-success p {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      margin-top: 10px;
+      color: var(--text);
+    }
+    #form-success small { color: var(--muted); font-size: 0.8rem; }
+
+    /* ── Footer ────────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding-top: 6px;
+    }
+    footer p { font-size: 10px; color: #333; }
+
+    /* ── Fade-in on scroll / load ──────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.06s; }
+    .d2 { transition-delay: 0.12s; }
+    .d3 { transition-delay: 0.18s; }
+    .d4 { transition-delay: 0.24s; }
+
+    /* ── Reduced motion ────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      body { opacity: 1; animation: none; }
+      .fade-in { opacity: 1; transform: none; transition: none; }
+      .price-errors-card:hover .pe-barber-bg,
+      .price-errors-card:focus-visible .pe-barber-bg { animation: none; opacity: 1; }
+    }
+
+    /* ── Small screens ─────────────────────────────────────────── */
+    @media (max-width: 420px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-<body class="ht-page">
+<body>
 
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
@@ -44,353 +428,149 @@
     <div class="nav-inner">
       <div class="nav-switcher">
         <a href="https://bryanhabibi.com" class="switcher-btn" aria-label="Go to Bryan Habibi site" data-track="nav-to-bryan">Bryan Habibi</a>
-        <a href="https://habibitakes.com" class="switcher-btn switcher-ht active" aria-label="Go to HabibiTakes site">
-          <img src="assets/habibitakes-button.jpg" alt="HabibiTakes logo" class="ht-btn-img" />
-        </a>
-      </div>
-
-      <div class="nav-right">
-        <ul class="nav-links" id="navLinks">
-          <li><a href="#about">About</a></li>
-          <li><a href="#links">Links</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-
-        <!-- Hamburger (mobile only) -->
-        <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
-          <span></span><span></span><span></span>
-        </button>
-
-        <!-- Dark / light mode toggle — sun / moon icons -->
-        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/>
-            <line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/>
-            <line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-          </svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-          </svg>
-        </button>
+        <a href="https://habibitakes.com" class="switcher-btn active" aria-label="HabibiTakes — current site" aria-current="page">HabibiTakes</a>
       </div>
     </div>
   </nav>
 
-
-  <!-- ============================================================
-       HERO — photo background with Ken Burns + overlay
-       Replace habibitakes-hero.jpg with your actual image file
-       ============================================================ -->
   <span id="main-content" tabindex="-1" aria-hidden="true" style="position:absolute;height:0;overflow:hidden"></span>
-  <section id="ht-hero">
-    <div class="ht-hero-img" role="img" aria-label="HabibiTakes sign on a California hillside"></div>
-    <div class="ht-hero-overlay"></div>
 
-    <!-- Typewriter tagline — center of hero, filled by JS -->
-    <p class="ht-hero-tagline" id="htHeroTagline" aria-label="Reseller · Sourcer · Entrepreneur"></p>
+  <main class="wrap">
 
-    <!-- Location badge — bottom left -->
-    <div class="ht-hero-badge">
-      <span class="ht-hero-loc-dot"></span>
-      <span class="ht-hero-loc-text">Anaheim Hills &middot; California</span>
-    </div>
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section class="card hero fade-in">
+      <img class="hero-logo" src="assets/habibitakes-button.jpg" alt="HabibiTakes logo" />
+      <h1 class="hero-name">HabibiTakes</h1>
+      <p class="hero-sub">Reseller · Sourcer · Entrepreneur</p>
+      <p class="hero-loc">Anaheim Hills · California · Est. 2019</p>
+    </section>
 
-    <!-- Scroll hint — bottom center -->
-    <div class="ht-scroll-hint" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="6 9 12 15 18 9"/>
-      </svg>
-    </div>
-  </section>
-
-
-  <!-- ============================================================
-       ABOUT
-       ============================================================ -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-
-        <!-- Left: bio + stats -->
-        <div>
-          <p class="section-label fade-in">About Us</p>
-          <h2 class="section-title fade-in d1">Built on<br/><em>moving product.</em></h2>
-          <p class="about-bio fade-in d2">
-            Operating an independent product sourcing, resale, and distribution business
-            serving DTC and B2B clients since 2019. Maintained margins between 150%&ndash;300%
-            through sourcing inventory at 80&ndash;90% off MSRP. From consumer goods to
-            electronics to apparel &mdash; I source smart, move fast, and turn inventory at
-            scale across eBay, Facebook Marketplace, OfferUp, and direct B2B buyers.
-          </p>
-          <div class="tl-date fade-in d2">Featured Achievement</div>
-          <ul class="tl-bullets fade-in d2" style="margin-bottom: 40px;">
-            <li>Sourced over 10,000 cases of Dog and Cat food through Amazon Prime and sold across B2B and D2C channels over a nine-month period. Implemented a community giveback program donating excess inventory to local animal shelters and veterinary hospitals, reinforcing brand goodwill and optimizing sell-through rates.</li>
-          </ul>
-          <div class="stats">
-            <div class="stat-card fade-in d2">
-              <div class="stat-num">Est. 2019</div>
-              <div class="stat-lbl">Anaheim Hills Original</div>
-            </div>
-            <div class="stat-card fade-in d3">
-              <div class="stat-num" id="stat-inf" style="font-size: 3.5rem; line-height: 1;">∞</div>
-              <div class="stat-lbl">Categories &amp; Counting</div>
-            </div>
-            <div class="stat-card fade-in d4">
-              <div class="stat-num">150&ndash;300%</div>
-              <div class="stat-lbl">Maintained Margins</div>
-            </div>
+    <!-- ============================================================
+         PRICE ERRORS
+         ============================================================ -->
+    <a href="https://whop.com/bandarsbounties?a=habibitakes" target="_blank" rel="noopener noreferrer" class="price-errors-card fade-in d1" aria-label="Price Errors — Live deals and steals" data-track="link-price-errors">
+      <div class="pe-barber-bg" aria-hidden="true"></div>
+      <div class="pe-content">
+        <div class="pe-left">
+          <div class="pe-icon" aria-hidden="true">🚨</div>
+          <div>
+            <div class="pe-title">Price Errors!</div>
+            <div class="pe-desc">Live deals &amp; steals — updated daily</div>
           </div>
         </div>
-
-        <!-- Right: circular slideshow (populated by JS from assets/ht-photo-N.png) -->
-        <div class="photo-wrap fade-in">
-          <div class="ht-circle-slideshow" id="htCircleSlideshow"
-               role="button" tabindex="0" title="Click to expand"></div>
-        </div>
-
+        <div class="pe-arrow" aria-hidden="true">↗</div>
       </div>
-    </div>
-  </section>
+    </a>
 
+    <!-- ============================================================
+         LINK CARDS
+         ============================================================ -->
+    <div class="links">
 
-  <!-- ============================================================
-       LINKS HUB — 4 platforms with brand hover glows
-       ============================================================ -->
-  <section id="links">
-    <div class="container">
-      <p class="section-label fade-in">Find Us</p>
-      <h2 class="section-title fade-in d1">Shop &amp;<br/><em>connect.</em></h2>
-
-      <div class="ht-links-grid">
-
-        <!-- Price Errors! -->
-        <a href="https://whop.com/bandarsbounties?a=habibitakes" target="_blank" rel="noopener noreferrer" class="price-errors-card fade-in" aria-label="Visit Price Errors — live deals and steals (opens in new tab)" data-track="link-price-errors">
-          <div class="pe-barber-bg" aria-hidden="true"></div>
-          <div class="pe-content">
-            <div class="pe-icon" aria-hidden="true">🚨</div>
-            <div class="pe-text">
-              <div class="pe-title">Price Errors!</div>
-              <div class="pe-desc">Live deals &amp; steals</div>
-            </div>
-            <div class="pe-arrow" aria-hidden="true">↗</div>
+      <!-- eBay -->
+      <a href="https://www.ebay.com/usr/habibitakes2" target="_blank" rel="noopener noreferrer" class="link-card lc-ebay fade-in d1" aria-label="Visit HabibiTakes eBay Store (opens in new tab)" data-track="link-ebay">
+        <div class="lc-left">
+          <div class="lc-icon" aria-hidden="true">📦</div>
+          <div>
+            <div class="lc-name">eBay Store</div>
+            <div class="lc-desc">Browse current listings</div>
           </div>
-        </a>
+        </div>
+        <span class="lc-arrow" aria-hidden="true">↗</span>
+      </a>
 
-        <!-- eBay -->
-        <a href="https://www.ebay.com/usr/habibitakes2" target="_blank" rel="noopener noreferrer" class="link-card lc-ebay fade-in" aria-label="Visit HabibiTakes on eBay (opens in new tab)" data-track="link-ebay">
-          <div class="lc-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
-              <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
-            </svg>
-          </div>
-          <div class="lc-info">
-            <div class="lc-name">eBay</div>
-          </div>
-          <div class="lc-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </div>
-        </a>
-
-        <!-- Instagram -->
-        <a href="https://www.instagram.com/habibitakes/" target="_blank" rel="noopener noreferrer" class="link-card lc-instagram fade-in d1" aria-label="Visit HabibiTakes on Instagram (opens in new tab)" data-track="link-instagram">
-          <div class="lc-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-              <circle cx="12" cy="12" r="4"/>
-              <circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/>
-            </svg>
-          </div>
-          <div class="lc-info">
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/habibitakes/" target="_blank" rel="noopener noreferrer" class="link-card lc-instagram fade-in d2" aria-label="Visit HabibiTakes on Instagram (opens in new tab)" data-track="link-instagram">
+        <div class="lc-left">
+          <div class="lc-icon" aria-hidden="true">📸</div>
+          <div>
             <div class="lc-name">Instagram</div>
+            <div class="lc-desc">Deals, finds &amp; behind the scenes</div>
           </div>
-          <div class="lc-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </div>
-        </a>
+        </div>
+        <span class="lc-arrow" aria-hidden="true">↗</span>
+      </a>
 
-        <!-- Facebook Marketplace -->
-        <a href="https://www.facebook.com/marketplace/profile/100002579779773/" target="_blank" rel="noopener noreferrer" class="link-card lc-facebook fade-in d2" aria-label="Visit HabibiTakes on Facebook Marketplace (opens in new tab)" data-track="link-facebook">
-          <div class="lc-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-          </div>
-          <div class="lc-info">
+      <!-- Facebook Marketplace -->
+      <a href="https://www.facebook.com/marketplace/profile/100002579779773/" target="_blank" rel="noopener noreferrer" class="link-card lc-facebook fade-in d3" aria-label="Visit HabibiTakes on Facebook Marketplace (opens in new tab)" data-track="link-facebook">
+        <div class="lc-left">
+          <div class="lc-icon" aria-hidden="true">🛒</div>
+          <div>
             <div class="lc-name">Facebook Marketplace</div>
+            <div class="lc-desc">Local pickups welcome</div>
           </div>
-          <div class="lc-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </div>
-        </a>
+        </div>
+        <span class="lc-arrow" aria-hidden="true">↗</span>
+      </a>
 
-        <!-- OfferUp -->
-        <a href="https://offerup.com/p/35720471" target="_blank" rel="noopener noreferrer" class="link-card lc-offerup fade-in d3" aria-label="Visit HabibiTakes on OfferUp (opens in new tab)" data-track="link-offerup">
-          <div class="lc-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <path d="M16 10a4 4 0 01-8 0"/>
-            </svg>
-          </div>
-          <div class="lc-info">
+      <!-- OfferUp -->
+      <a href="https://offerup.com/p/35720471" target="_blank" rel="noopener noreferrer" class="link-card lc-offerup fade-in d4" aria-label="Visit HabibiTakes on OfferUp (opens in new tab)" data-track="link-offerup">
+        <div class="lc-left">
+          <div class="lc-icon" aria-hidden="true">📍</div>
+          <div>
             <div class="lc-name">OfferUp</div>
-          </div>
-          <div class="lc-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </div>
-        </a>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================================================
-       CONTACT
-       ============================================================ -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-layout">
-
-        <div>
-          <p class="section-label fade-in">Get In Touch</p>
-          <h2 class="section-title fade-in d1">Let&rsquo;s<br/><em>do business.</em></h2>
-          <p class="fade-in d2">
-            Interested in bulk purchasing, wholesale deals, B2B partnerships, or sourcing
-            inquiries? Fill out the form and I&rsquo;ll get back to you within 24&ndash;48 hours.
-          </p>
-        </div>
-
-        <!-- Replace REPLACE_WITH_YOUR_ID with your Formspree form ID -->
-        <div class="contact-form fade-in d2">
-          <form id="contact-form-ht" novalidate>
-            <div class="form-row">
-              <label for="fname">Your Name</label>
-              <input type="text" id="fname" name="name" placeholder="Johnny Appleseed" required />
-            </div>
-            <div class="form-row">
-              <label for="femail">Email Address</label>
-              <input type="email" id="femail" name="email" placeholder="you@example.com" required />
-            </div>
-            <div class="form-row">
-              <label for="fmessage">Message</label>
-              <textarea id="fmessage" name="message" placeholder="Tell me what you&rsquo;re looking for…" required></textarea>
-            </div>
-            <button type="submit" class="submit-btn" data-fs-submit-btn>Send Message &rarr;</button>
-            <div id="form-error"></div>
-            <p class="form-note">Your message goes straight to my inbox.<br/>I typically respond within 24&ndash;48 hours.</p>
-            <!-- Honeypot — hidden from real users, bots auto-fill it -->
-            <div style="position:absolute;left:-9999px;height:0;overflow:hidden;" aria-hidden="true">
-              <label for="website">Leave this empty</label>
-              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
-            </div>
-            <input type="hidden" name="_timestamp" value="" />
-          </form>
-
-          <div id="form-success" data-fs-success>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
-            <p>Thanks for reaching out!</p>
-            <small>I&rsquo;ll get back to you soon.</small>
+            <div class="lc-desc">OC &amp; surrounding areas</div>
           </div>
         </div>
+        <span class="lc-arrow" aria-hidden="true">↗</span>
+      </a>
 
-      </div>
     </div>
-  </section>
 
+    <!-- ============================================================
+         CONTACT
+         ============================================================ -->
+    <section id="contact" class="card contact fade-in">
+      <p class="contact-label">Contact</p>
+      <p class="contact-title">Let's do business</p>
 
-  <!-- ============================================================
-       FOOTER
-       ============================================================ -->
-  <footer>
-    <p>&copy; <span id="yr">2026</span> &mdash; HabibiTakes</p>
-  </footer>
+      <form id="contact-form-ht" novalidate>
+        <div class="form-grid">
+          <input type="text" id="fname" name="name" placeholder="Your name" aria-label="Your name" required />
+          <input type="email" id="femail" name="email" placeholder="Email address" aria-label="Email address" required />
+        </div>
+        <textarea id="fmessage" name="message" placeholder="Tell me what you&rsquo;re looking for…" aria-label="Message" required></textarea>
+        <button type="submit" class="submit-btn" data-fs-submit-btn>Send message &rarr;</button>
+        <div id="form-error"></div>
+        <p class="form-note">Your message goes straight to my inbox. I typically respond within 24&ndash;48 hours.</p>
+        <!-- Honeypot — hidden from real users, bots auto-fill it -->
+        <div style="position:absolute;left:-9999px;height:0;overflow:hidden;" aria-hidden="true">
+          <label for="website">Leave this empty</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+        <input type="hidden" name="_timestamp" value="" />
+      </form>
+
+      <div id="form-success" data-fs-success>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <p>Thanks for reaching out!</p>
+        <small>I&rsquo;ll get back to you soon.</small>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer>
+      <p>&copy; <span id="yr">2026</span> HabibiTakes</p>
+    </footer>
+
+  </main>
 
 
   <!-- ============================================================
        JAVASCRIPT
        ============================================================ -->
   <script>
-    /* ── Dark / Light mode — class toggled on <body> for ht-page ── */
-    (function () {
-      const saved       = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (!saved && prefersDark)) document.body.classList.add('dark');
-    })();
-
-    const themeToggle = document.getElementById('themeToggle');
-    themeToggle.addEventListener('click', () => {
-      const isDark = document.body.classList.toggle('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-    });
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-      if (!localStorage.getItem('theme')) document.body.classList.toggle('dark', e.matches);
-    });
-
     /* ── Footer year ─────────────────────────────────────────────── */
     document.getElementById('yr').textContent = new Date().getFullYear();
 
-    /* ── Nav: scroll glass + active-link highlighting ────────────── */
-    const navbar     = document.getElementById('navbar');
-    const sections   = document.querySelectorAll('section[id]');
-    const navAnchors = document.querySelectorAll('.nav-links a');
-
-    function onScroll() {
-      navbar.classList.toggle('scrolled', window.scrollY > 60);
-      let current = '';
-      sections.forEach(sec => {
-        if (window.scrollY >= sec.offsetTop - 130) current = sec.id;
-      });
-      navAnchors.forEach(a =>
-        a.classList.toggle('active', a.getAttribute('href') === '#' + current)
-      );
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    /* ── Mobile hamburger ────────────────────────────────────────── */
-    const navToggle = document.getElementById('navToggle');
-    const navLinks  = document.getElementById('navLinks');
-    navToggle.addEventListener('click', () => {
-      const isOpen = navToggle.classList.toggle('open');
-      navLinks.classList.toggle('open', isOpen);
-      navToggle.setAttribute('aria-expanded', String(isOpen));
-    });
-    navAnchors.forEach(a => a.addEventListener('click', () => {
-      navToggle.classList.remove('open');
-      navLinks.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
-    }));
-    // Close on outside click
-    document.addEventListener('click', e => {
-      if (!navbar.contains(e.target) && navLinks.classList.contains('open')) {
-        navToggle.classList.remove('open');
-        navLinks.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      }
-    });
-
-    /* ── Intersection Observer: fade-in on scroll ────────────────── */
+    /* ── Fade-in on scroll / load ────────────────────────────────── */
     const io = new IntersectionObserver(
       entries => entries.forEach(e => {
         if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
@@ -401,231 +581,7 @@
     fadeEls.forEach(el => io.observe(el));
     setTimeout(() => fadeEls.forEach(el => el.classList.add('visible')), 1500);
 
-    /* ── Circular slideshow with lightbox ────────────────────────── */
-    (function () {
-      const container = document.getElementById('htCircleSlideshow');
-      if (!container) return;
-
-      const slots   = new Array(10).fill(null);
-      let   pending = 10;
-
-      function tryBuild() {
-        if (--pending > 0) return;
-        // ── Captions — edit the text below to update each photo's caption ──
-        // Index 0 = ht-photo-1, index 1 = ht-photo-2, etc.
-        const slideshowCaptions = [
-          "First Sneaker Convention 2022 ( Costa Mesa , California )",   // ht-photo-1
-          "$400 tool bundle error for $100 x 64 units",                  // ht-photo-2
-          "GotSole 2023 ( Los Angeles, California )",                    // ht-photo-3
-          "Freebie Garage Sale 2023",                                    // ht-photo-4
-          "Yeezy Slides 2023",                                           // ht-photo-5
-          "Freebie Swap Meet 2023",                                      // ht-photo-6
-          "Dog Food Haul 2023",                                          // ht-photo-7
-          "Pokemon Center Celebrations ETB Haul 2021",                   // ht-photo-8
-          "PlayStation 4 Haul 2022",                                     // ht-photo-9
-          "PlayStation 5 Haul 2021",                                     // ht-photo-10
-          "Pokemon Prismatic Evolutions SPC Haul 2025",                  // ht-photo-11
-          "LABUBU Haul 2025",                                            // ht-photo-12
-          "Dog Food Haul",                                               // ht-photo-13
-        ];
-
-        /* Build slide elements — preserve original slot index for captions */
-        const loaded = slots.map((src, i) => src ? { src, idx: i } : null).filter(Boolean);
-        if (!loaded.length) return;
-
-        loaded.forEach(({ src, idx }, i) => {
-          const slide = document.createElement('div');
-          slide.className = 'ht-cs-slide' + (i === 0 ? ' active' : '');
-          const img = document.createElement('img');
-          img.src = src;
-          img.alt = 'HabibiTakes product photo ' + (idx + 1);
-          slide.appendChild(img);
-          const capText = slideshowCaptions[idx] || '';
-          if (capText) {
-            const cap = document.createElement('div');
-            cap.className = 'ht-cs-caption';
-            const capInner = document.createElement('p');
-            capInner.className = 'ht-cs-caption-text';
-            capInner.textContent = capText;
-            cap.appendChild(capInner);
-            slide.appendChild(cap);
-          }
-          container.appendChild(slide);
-        });
-
-        /* State */
-        const slides = container.querySelectorAll('.ht-cs-slide');
-        let cur = 0;
-        let lbOpen = false;
-        let advanceTimer = null;
-
-        /* Advance by dir (+1 forward, -1 back) */
-        function advanceSlide(dir) {
-          slides[cur].classList.remove('active');
-          cur = (cur + dir + slides.length) % slides.length;
-          slides[cur].classList.add('active');
-          if (lbOpen) syncLightbox();
-        }
-
-        /* Reset the 4-second auto-advance timer */
-        function scheduleAdvance() {
-          clearTimeout(advanceTimer);
-          if (slides.length > 1) {
-            advanceTimer = setTimeout(() => { advanceSlide(1); scheduleAdvance(); }, 4000);
-          }
-        }
-
-        /* Lightbox */
-        const lb = document.createElement('div');
-        lb.className = 'ht-lightbox';
-        lb.innerHTML =
-          '<button class="ht-lightbox-close" aria-label="Close">&times;<\/button>' +
-          '<button class="ht-lb-arrow ht-lb-prev" aria-label="Previous photo">&#8249;<\/button>' +
-          '<div class="ht-lb-content"><img alt="HabibiTakes"><p class="ht-lb-caption"><\/p><\/div>' +
-          '<button class="ht-lb-arrow ht-lb-next" aria-label="Next photo">&#8250;<\/button>';
-        document.body.appendChild(lb);
-
-        const lbImg     = lb.querySelector('.ht-lb-content img');
-        const lbCaption = lb.querySelector('.ht-lb-caption');
-        const lbClose   = lb.querySelector('.ht-lightbox-close');
-        const lbPrev    = lb.querySelector('.ht-lb-prev');
-        const lbNext    = lb.querySelector('.ht-lb-next');
-
-        function syncLightbox() {
-          const activeImg = slides[cur].querySelector('img');
-          const activeCap = slides[cur].querySelector('.ht-cs-caption-text');
-          if (activeImg) lbImg.src = activeImg.src;
-          lbCaption.textContent = activeCap ? activeCap.textContent : '';
-        }
-
-        const openLb = () => { lbOpen = true; syncLightbox(); lb.classList.add('open'); };
-        const closeLb = () => { lb.classList.remove('open'); lbOpen = false; };
-
-        container.addEventListener('click', openLb);
-        container.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openLb(); });
-        lb.addEventListener('click', closeLb);
-        lb.querySelector('.ht-lb-content').addEventListener('click', e => e.stopPropagation());
-        lbClose.addEventListener('click', e => { e.stopPropagation(); closeLb(); });
-        lbPrev.addEventListener('click', e => { e.stopPropagation(); advanceSlide(-1); scheduleAdvance(); });
-        lbNext.addEventListener('click', e => { e.stopPropagation(); advanceSlide(1);  scheduleAdvance(); });
-        document.addEventListener('keydown', e => {
-          if (!lbOpen) return;
-          if (e.key === 'Escape')      closeLb();
-          else if (e.key === 'ArrowLeft')  { advanceSlide(-1); scheduleAdvance(); }
-          else if (e.key === 'ArrowRight') { advanceSlide(1);  scheduleAdvance(); }
-        });
-
-        /* Start auto-advance */
-        if (slides.length > 1) scheduleAdvance();
-      }
-
-      /* Preload images 1–20. Try .jpeg → .jpg → .JPG per slot; first hit wins. */
-      const MAX   = 20;
-      const EXTS  = ['.jpeg', '.jpg', '.JPG'];
-      pending = MAX;
-
-      function loadSlot(idx) {
-        const exts = [...EXTS];
-        function tryNext() {
-          if (!exts.length) { tryBuild(); return; }
-          const ext = exts.shift();
-          const img = new Image();
-          img.onload  = () => { slots[idx] = img.src; tryBuild(); };
-          img.onerror = tryNext;
-          img.src = 'assets/ht-photo-' + (idx + 1) + ext;
-        }
-        tryNext();
-      }
-      slots.length = MAX;
-      slots.fill(null);
-      for (let i = 0; i < MAX; i++) loadSlot(i);
-    })();
-
-    /* ── Scroll progress bar ─────────────────────────────────────── */
-    (function () {
-      const bar = document.createElement('div');
-      bar.id = 'scroll-progress';
-      document.body.prepend(bar);
-      window.addEventListener('scroll', () => {
-        const h = document.documentElement;
-        const pct = (window.scrollY / (h.scrollHeight - h.clientHeight)) * 100;
-        bar.style.width = Math.min(pct, 100) + '%';
-      }, { passive: true });
-    })();
-
-    /* ── Animated stat counter ──────────────────────────────────── */
-    (function () {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      document.querySelectorAll('.stat-num').forEach(el => {
-        const raw = el.textContent.trim();
-        const num = Number(raw);
-        if (!Number.isFinite(num) || raw !== String(num)) return;
-        el.textContent = '0';
-        const counterIo = new IntersectionObserver(entries => {
-          if (!entries[0].isIntersecting) return;
-          counterIo.disconnect();
-          const start = performance.now();
-          const dur = 1500;
-          (function tick(now) {
-            const p = Math.min((now - start) / dur, 1);
-            const eased = 1 - Math.pow(1 - p, 3);
-            el.textContent = Math.round(eased * num);
-            if (p < 1) requestAnimationFrame(tick);
-          })(start);
-        }, { threshold: 0.5 });
-        counterIo.observe(el.closest('.stat-card') || el);
-      });
-    })();
-
-
-    /* ── Cursor trail (pointer: fine devices only) ────────────── */
-    (function () {
-      if (!window.matchMedia('(pointer: fine)').matches) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      const DOTS = 8;
-      const trail = Array.from({ length: DOTS }, () => {
-        const d = document.createElement('div');
-        d.className = 'cursor-trail-dot';
-        document.body.appendChild(d);
-        return { el: d, x: -100, y: -100 };
-      });
-      let mx = -100, my = -100;
-      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-      (function tick() {
-        trail.forEach((dot, i) => {
-          const prev = i === 0 ? { x: mx, y: my } : trail[i - 1];
-          dot.x += (prev.x - dot.x) * 0.35;
-          dot.y += (prev.y - dot.y) * 0.35;
-          dot.el.style.transform = `translate(${dot.x}px,${dot.y}px)`;
-          dot.el.style.opacity = ((DOTS - i) / DOTS) * 0.6;
-        });
-        requestAnimationFrame(tick);
-      })();
-    })();
-
-    /* ── Typewriter effect ───────────────────────────────────────── */
-    (function () {
-      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      function typewrite(el, text, delay) {
-        if (reduced) { el.textContent = text; return; }
-        el.textContent = '';
-        el.classList.add('tw-typing');
-        let i = 0;
-        setTimeout(() => {
-          const iv = setInterval(() => {
-            el.textContent += text[i++];
-            if (i >= text.length) {
-              clearInterval(iv);
-              setTimeout(() => el.classList.remove('tw-typing'), 1000);
-            }
-          }, 45);
-        }, delay);
-      }
-      const tag = document.getElementById('htHeroTagline');
-      if (tag) typewrite(tag, 'Reseller · Sourcer · Entrepreneur', 1200);
-    })();
-
-    /* ── Page transition ─────────────────────────────────────────── */
+    /* ── Page transition on switcher click ───────────────────────── */
     document.querySelectorAll('.switcher-btn').forEach(btn => {
       btn.addEventListener('click', e => {
         const href = btn.getAttribute('href');
@@ -686,7 +642,7 @@
           ? 'Unable to send — please email contact@habibitakes.com directly.'
           : (err.message || 'Something went wrong. Please try again.');
         errEl.style.display = 'block';
-        btn.textContent     = 'Send Message →';
+        btn.textContent     = 'Send message →';
         btn.disabled        = false;
       }
     });
