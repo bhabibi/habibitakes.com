@@ -122,9 +122,10 @@
     }
     .switcher-btn:hover { border-color: var(--accent); color: var(--text); }
     .switcher-btn.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
+      background: #5b9bd5;
+      color: #ffffff;
+      border-color: #5b9bd5;
+      box-shadow: 0 0 12px rgba(91, 155, 213, 0.25);
     }
 
     /* ── Layout shell ──────────────────────────────────────────── */
@@ -153,7 +154,8 @@
       width: 80px;
       height: 80px;
       border-radius: 14px;
-      border: 0.5px solid #2a4060;
+      border: 0.5px solid rgba(91, 155, 213, 0.3);
+      box-shadow: 0 0 20px rgba(91, 155, 213, 0.12);
       object-fit: cover;
       display: block;
       margin: 0 auto 14px;
@@ -274,7 +276,7 @@
       border: 0.5px solid var(--border);
       border-radius: 12px;
       background: var(--card);
-      transition: border-color 0.25s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .lc-left { display: flex; align-items: center; gap: 10px; }
     .lc-icon {
@@ -291,11 +293,12 @@
     }
     .lc-name { font-size: 13px; font-weight: 500; color: var(--text); }
     .lc-desc { font-size: 10px; color: #555; margin-top: 1px; }
-    .lc-arrow { font-size: 12px; color: var(--faint); flex-shrink: 0; }
-    .lc-ebay:hover     { border-color: #e53238; }
-    .lc-instagram:hover{ border-color: #c13584; }
-    .lc-facebook:hover { border-color: #1877f2; }
-    .lc-offerup:hover  { border-color: #3a8fd1; }
+    .lc-arrow { font-size: 12px; color: var(--faint); flex-shrink: 0; transition: color 0.2s ease; }
+    .link-card:hover {
+      border-color: rgba(91, 155, 213, 0.5);
+      box-shadow: 0 0 16px rgba(91, 155, 213, 0.1);
+    }
+    .link-card:hover .lc-arrow { color: #5b9bd5; }
 
     /* ── Contact form ──────────────────────────────────────────── */
     .contact { padding: 18px; }
@@ -327,6 +330,7 @@
       border: 0.5px solid var(--border-subtle);
       border-radius: 8px;
       padding: 0 12px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     #contact-form-ht input { height: 34px; }
     #contact-form-ht textarea {
@@ -341,10 +345,11 @@
     #contact-form-ht input:focus,
     #contact-form-ht textarea:focus {
       outline: none;
-      border-color: var(--accent);
+      border-color: #5b9bd5;
+      box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.1);
     }
     .submit-btn {
-      background: var(--accent);
+      background: #5b9bd5;
       color: #fff;
       border: none;
       border-radius: 20px;
@@ -355,7 +360,7 @@
       cursor: pointer;
       transition: background 0.2s ease;
     }
-    .submit-btn:hover { background: #2a7abf; }
+    .submit-btn:hover { background: #3a7fc1; }
     .submit-btn:disabled { opacity: 0.6; cursor: default; }
     #form-error {
       display: none;
@@ -386,7 +391,8 @@
     /* ── Footer ────────────────────────────────────────────────── */
     footer {
       text-align: center;
-      padding-top: 6px;
+      padding-top: 12px;
+      border-top: 0.5px solid rgba(91, 155, 213, 0.1);
     }
     footer p { font-size: 10px; color: #333; }
 
